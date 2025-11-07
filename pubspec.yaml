@@ -1,5 +1,5 @@
-name: techlog
-description: A comprehensive productivity app for tech students
+name: techieslog
+description: TechiesLog - A comprehensive productivity app for tech students
 version: 1.0.0+1
 
 environment:
@@ -58,6 +58,6 @@ flutter:
 flutter_launcher_icons:
   android: true
   ios: true
-  image_path: "assets/logo.png"
-  adaptive_icon_background: "#FFD700"
-  adaptive_icon_foreground: "assets/logo.png"
+  image_path: "lib/ui/Logo3.1.1.png"
+  adaptive_icon_background: "#FFFFFF"
+  adaptive_icon_foreground: "lib/ui/Logo3.1.1.png"

@@ -3,9 +3,9 @@ import 'package:provider/provider.dart';
 import '../../core/providers/app_state.dart';
 import '../../core/providers/theme_provider.dart';
 import '../../core/utils/responsive.dart';
-import 'premium_dashboard.dart';
+import 'dashboard_clean.dart';
 import 'premium_work_complete.dart';
-import 'premium_hub_enhanced.dart';
+import 'premium_hub_complete.dart';
 import 'premium_logs_calendar.dart';
 import 'finance_screen.dart';
 import 'settings_screen.dart';
@@ -56,9 +56,9 @@ class _ModernMainNavigationState extends State<ModernMainNavigation>
   ];
 
   late final List<Widget> _screens = [
-    const PremiumDashboard(),
+    const DashboardClean(),
     const PremiumWorkComplete(),
-    const PremiumHubEnhanced(),
+    const PremiumHubComplete(),
     const FinanceScreen(),
     const PremiumLogsCalendar(),
     const SettingsScreen(),

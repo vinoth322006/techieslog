@@ -1,0 +1,969 @@
+TechLog — Complete Software Requirements Specification (SRS)
+Version: 2.0
+Author: Vino
+Date: November 2025
+Status: Final Approved Specification
+
+Executive Summary
+TechLog 2.0 represents a paradigm shift in personal productivity management for tech students, combining robust task management, comprehensive learning tracking, financial planning, and personal growth monitoring into a single, privacy-focused application. Built on the core principles of simplicity, local-first operation, and user sovereignty, it serves as a complete digital ecosystem that respects user data while providing powerful insights into personal development patterns.
+Key Differentiators
+    • Complete Offline Operation: Zero cloud dependency for core functionality
+    • Cross-Module Intelligence: Automated progress tracking across tasks, study, and goals
+    • Student-Centric Design: Tailored specifically for tech education workflows
+    • Privacy by Default: All data remains on-device with military-grade encryption options
+
+1. Introduction
+1.1 Document Purpose
+This SRS serves as the single source of truth for TechLog 2.0 development, providing unambiguous specifications for implementation, verification, and maintenance. It ensures all stakeholders share a common understanding of system capabilities, constraints, and quality standards.
+1.2 Scope and Boundaries
+In Scope:
+    • Offline-first cross-platform application (mobile + desktop)
+    • Local data storage with SQLite database
+    • Comprehensive productivity tracking suite
+    • Export/import functionality for data portability
+    • Optional local encryption
+Out of Scope:
+    • Real-time cloud synchronization
+    • Multi-user collaboration features
+    • Social sharing capabilities
+    • Third-party service integrations (unless user-initiated export)
+1.3 Intended Audience & Responsibilities
+Role
+Responsibilities
+Documentation Use
+Project Owner
+Feature prioritization, acceptance criteria
+Requirements validation, scope management
+Development Team
+Implementation, technical design
+Functional specs, architecture, data models
+UI/UX Designers
+Interface design, user workflows
+Screen specifications, interaction patterns
+QA Engineers
+Test planning, validation
+Acceptance criteria, test cases, edge conditions
+DevOps Team
+Build, packaging, deployment
+Environment specs, distribution requirements
+Technical Writers
+User documentation, help content
+Feature descriptions, user workflows
+1.4 Definitions, Acronyms, and Abbreviations
+Core Concepts:
+    • Atomic Action: Primary user interaction completable in ≤3 clicks/taps
+    • Focus Session: Timed deep work period with specific intent
+    • Habit Coupling: Automatic progress propagation between habits and related goals
+    • Tech Investment: Financial expenditure specifically for skill development
+    • Knowledge Vault: Organized repository of learning resources and progress
+Technical Terms:
+    • PWA: Progressive Web App capabilities for installable web experience
+    • CRUD: Create, Read, Update, Delete operations
+    • AES-256: Advanced Encryption Standard 256-bit encryption
+    • SQLite: Lightweight, file-based relational database
+    • JSON Schema: Structured data format for backup/export operations
+1.5 References
+    • IEEE 830-1998 SRS Guidelines
+    • SQLite Documentation v3.45+
+    • Flutter Framework Documentation v3.0+
+    • WCAG 2.1 AA Accessibility Guidelines
+    • Material Design 3 Component Specifications
+
+2. Overall Description
+2.1 Product Perspective
+TechLog 2.0 operates as a standalone personal productivity system, designed to replace multiple disparate applications (task managers, habit trackers, finance apps) with a unified, intelligence-driven platform. The system maintains complete data sovereignty by operating offline-first while providing robust data portability mechanisms.
+2.2 Product Functions (Comprehensive Feature Set)
+Core Productivity Suite
+    • Unified Task Management: Hierarchical tasks with project relationships
+    • Lightweight Todo System: Quick-capture items with smart organization
+    • Advanced Project Tracking: Milestone-based progress with resource linking
+    • Intelligent Focus Timer: Pomodoro-based sessions with automatic logging
+Learning & Development
+    • Study Session Tracking: Detailed topic and resource monitoring
+    • Knowledge Vault: Structured learning resource management
+    • Study Plan Generator: AI-like scheduling based on goals and availability
+    • Flashcard System: Spaced repetition for technical concepts
+Personal Management
+    • Habit Formation: Streak-based tracking with frequency adaptation
+    • Goal Achievement System: Long-term objective tracking with milestone celebration
+    • Mind & Wellness Tracking: Mood correlation with productivity metrics
+    • Reflection System: Guided journaling with progress integration
+Financial Intelligence
+    • Expense/Income Tracking: Category-based financial monitoring
+    • Tech Investment ROI: Value assessment for educational expenditures
+    • Budget Planning: Monthly targets with intelligent alerting
+    • Financial Analytics: Trend analysis and export capabilities
+Utility Ecosystem
+    • Productivity Tools: Calculator, converters, timetable planning
+    • Quick Note System: Markdown-enabled rapid capture
+    • Code Snippet Management: Syntax-highlighted technical notes
+    • Backup & Security: Comprehensive data protection and portability
+2.3 User Classes and Characteristics
+Primary User: Undergraduate Tech Student
+    • Characteristics: Age 18-24, multiple courses/projects, limited budget
+    • Goals: Academic success, skill development, time management
+    • Technical Level: Moderate app literacy, privacy-conscious
+    • Usage Patterns: Daily check-ins, weekly planning, semester tracking
+Secondary User: Graduate Research Student
+    • Characteristics: Age 22-30, research-focused, project-driven work
+    • Goals: Research management, publication tracking, comprehensive documentation
+    • Technical Level: High app literacy, data organization needs
+    • Usage Patterns: Detailed project tracking, long-term goal management
+Tertiary User: Early-Career Developer
+    • Characteristics: Age 22-28, continuous learning focus, professional development
+    • Goals: Skill advancement, side project management, career growth tracking
+    • Technical Level: Expert app usage, integration preferences
+    • Usage Patterns: Daily productivity tracking, goal progress monitoring
+2.4 Operating Environment
+Supported Platforms
+Platform
+Minimum Version
+Target Devices
+Testing Priority
+Android
+9.0 (API 28)
+Mid-range smartphones
+High
+iOS
+14.0
+iPhone 8 and newer
+High
+Windows
+Windows 10
+Desktop/laptop
+Medium
+macOS
+Big Sur (11.0)
+MacBook Air/Pro
+Medium
+Linux
+Ubuntu 20.04 LTS
+Desktop environments
+Low
+Technical Constraints
+    • Storage: Minimum 100MB free space, recommended 500MB
+    • Memory: 2GB RAM minimum, 4GB recommended
+    • Processor: Multi-core 1.5GHz+ for optimal performance
+    • Permissions: Local storage, notifications (optional), system calendar (optional)
+2.5 Design and Implementation Constraints
+Technical Constraints
+    • Offline-First Architecture: All core features must function without internet
+    • Local Storage Only: No cloud dependencies in default configuration
+    • Cross-Platform Consistency: Feature parity across mobile and desktop
+    • Performance Budget: App size < 50MB download, < 100MB installed
+Design Constraints
+    • Accessibility Compliance: WCAG 2.1 AA minimum standards
+    • Minimalist Interface: Maximum 3 primary actions per screen
+    • Consistent Navigation: Uniform patterns across all modules
+    • Progressive Disclosure: Advanced features accessible but not prominent
+2.6 User Documentation and Support
+Documentation Strategy
+    • In-App Guidance: Contextual tooltips and onboarding flows
+    • Interactive Tutorials: Step-by-step feature exploration
+    • Offline Help System: Comprehensive searchable documentation
+    • Exportable Manuals: PDF and Markdown format user guides
+Support Infrastructure
+    • Error Reporting: User-initiated diagnostic export
+    • Community Forum: Peer-to-peer support platform
+    • Knowledge Base: Searchable troubleshooting articles
+    • Privacy-First Analytics: Opt-in usage pattern collection
+
+3. System Features & Functional Requirements
+3.1 Enhanced Dashboard System (FR-100 Series)
+FR-101: Smart Daily Overview
+Description: Consolidated view of daily priorities, progress, and quick actions
+Priority: Critical
+Detailed Specifications:
+    • Current date with week progress indicator
+    • Active focus timer with quick control
+    • Today's study target progress bar (0-100%)
+    • Top 3 priority tasks with completion status
+    • Habit streak summary (current/longest)
+    • Financial snapshot (daily spend vs budget)
+    • Motivational quote based on performance trends
+Acceptance Criteria:
+    • AC-101.1: All widgets update in real-time without manual refresh
+    • AC-101.2: Tap any widget navigates to corresponding detail view
+    • AC-101.3: Performance: Load complete dashboard in < 1 second
+FR-102: Quick Action System
+Description: Universal rapid input mechanism for common actions
+Priority: High
+Detailed Specifications:
+    • Floating Action Button (FAB) with expandable options
+    • Voice input support for todos and notes
+    • Keyboard shortcuts (desktop): T (todo), F (focus), S (study), E (expense)
+    • Recent templates for repetitive entries
+Acceptance Criteria:
+    • AC-102.1: Quick add completes in ≤ 2 taps/clicks
+    • AC-102.2: Voice input accuracy > 90% for common phrases
+    • AC-102.3: Desktop shortcuts work from any screen
+3.2 Unified Task Management (FR-200 Series)
+FR-201: Hierarchical Task System
+Description: Comprehensive task management with project relationships
+Priority: Critical
+Detailed Specifications:
+    • Task Properties:
+        ◦ Title (required), description, tags (multiple)
+        ◦ Priority: Low/Medium/High/Urgent (color-coded)
+        ◦ Status: Not Started/In Progress/Completed/Cancelled
+        ◦ Time estimates: Planned vs actual minutes
+        ◦ Due dates with smart reminders
+        ◦ Project relationships and dependencies
+    • Smart Features:
+        ◦ Recurring task templates
+        ◦ Progress auto-calculation from subtasks
+        ◦ Focus session integration
+        ◦ Deadline proximity alerts
+Data Model:
+sql
+tasks:
+  id (UUID, PK), title (TEXT), description (TEXT), 
+  priority (INT: 0-3), status (INT: 0-3), 
+  estimated_minutes (INT), actual_minutes (INT),
+  due_date (DATETIME), reminder_offset (INT),
+  project_id (UUID, FK), parent_task_id (UUID, FK),
+  tags (JSON), created_at (DATETIME), updated_at (DATETIME)
+Acceptance Criteria:
+    • AC-201.1: Create task with all fields in < 10 seconds
+    • AC-201.2: Task completion updates project progress automatically
+    • AC-201.3: Overdue tasks highlighted with severity indicators
+FR-202: Lightweight Todo System
+Description: Rapid-capture system for immediate actions
+Priority: High
+Detailed Specifications:
+    • Todo Properties:
+        ◦ Title (required), category, priority flag
+        ◦ Due: Today/Tomorrow/Upcoming/Someday
+        ◦ Quick status toggle (pending/done)
+    • Advanced Features:
+        ◦ Voice-to-todo conversion
+        ◦ Drag-and-drop reorganization
+        ◦ Bulk operations
+        ◦ "Convert to Task" promotion
+        ◦ Auto-archive of old completed items
+Acceptance Criteria:
+    • AC-202.1: Add todo in ≤ 3 seconds from any screen
+    • AC-202.2: Voice input processes within 2 seconds
+    • AC-202.3: Conversion to task preserves all todo data
+3.3 Learning Ecosystem (FR-300 Series)
+FR-301: Study Session Tracking
+Description: Comprehensive learning activity monitoring
+Priority: Critical
+Detailed Specifications:
+    • Session Recording:
+        ◦ Subject, topic, subtopic hierarchy
+        ◦ Duration tracking (manual or timer-based)
+        ◦ Resource links (books, videos, articles)
+        ◦ Comprehension rating (1-5 stars)
+        ◦ Project/course association
+    • Integration Features:
+        ◦ Automatic focus session conversion
+        ◦ Knowledge Vault progress updates
+        ◦ Study plan target contribution
+        ◦ Exam preparation tracking
+Data Model:
+sql
+study_sessions:
+  id (UUID, PK), subject (TEXT), topic (TEXT), 
+  subtopic (TEXT), minutes (INT), 
+  resources (JSON), comprehension_rating (INT),
+  linked_project_id (UUID, FK), linked_course_id (UUID, FK),
+  created_at (DATETIME), updated_at (DATETIME)
+Acceptance Criteria:
+    • AC-301.1: Log study session in ≤ 15 seconds
+    • AC-301.2: Auto-calculate weekly study time vs targets
+    • AC-301.3: Resource links open in appropriate viewers
+FR-302: Knowledge Vault
+Description: Structured learning resource and progress management
+Priority: High
+Detailed Specifications:
+    • Topic Management:
+        ◦ Hierarchical subject organization
+        ◦ Progress tracking (0-100%)
+        ◦ Prerequisite relationships
+        ◦ Time investment tracking
+    • Resource System:
+        ◦ Multiple types: books, courses, videos, articles, projects
+        ◦ Status tracking: Planned/In Progress/Completed/Abandoned
+        ◦ Value assessment (ROI for paid resources)
+        ◦ Review and rating system
+Acceptance Criteria:
+    • AC-302.1: Add new learning resource in ≤ 20 seconds
+    • AC-302.2: Progress auto-updates from study sessions
+    • AC-302.3: Search resources across all metadata fields
+3.4 Project Management (FR-400 Series)
+FR-401: Project Lifecycle Tracking
+Description: Complete project management from ideation to completion
+Priority: High
+Detailed Specifications:
+    • Project Properties:
+        ◦ Title, description, objectives
+        ◦ Tech stack tags and skill requirements
+        ◦ Timeline: start date, target completion, actual completion
+        ◦ Progress metrics: manual vs auto-calculated
+    • Milestone System:
+        ◦ Weighted milestone progress
+        ◦ Dependency relationships
+        ◦ Celebration triggers for completion
+    • Project Logs:
+        ◦ Daily time and activity tracking
+        ◦ Git commit integration (manual linking)
+        ◦ Problem/solution documentation
+Data Model:
+sql
+projects:
+  id (UUID, PK), title (TEXT), description (TEXT),
+  tech_stack (JSON), objectives (JSON),
+  start_date (DATETIME), target_date (DATETIME), 
+  actual_end_date (DATETIME), status (INT: 0-4),
+  progress_percent (INT), created_at (DATETIME)
+
+milestones:
+  id (UUID, PK), project_id (UUID, FK), title (TEXT),
+  description (TEXT), target_date (DATETIME),
+  weight (INT), depends_on (UUID, FK), 
+  status (INT), completed_date (DATETIME)
+Acceptance Criteria:
+    • AC-401.1: Create project with all core fields in < 30 seconds
+    • AC-401.2: Milestone completion updates project progress correctly
+    • AC-401.3: Project timeline visualization shows critical path
+3.5 Financial Intelligence (FR-500 Series)
+FR-501: Comprehensive Money Management
+Description: Student-focused financial tracking and planning
+Priority: High
+Detailed Specifications:
+    • Transaction System:
+        ◦ Income/expense categorization
+        ◦ Tech-specific categories: Hardware, Software, Courses, Books
+        ◦ Recurring transaction templates
+        ◦ Receipt image attachment (local storage only)
+    • Budget Planning:
+        ◦ Monthly category budgets
+        ◦ Progressive alerting (50%, 80%, 100% thresholds)
+        ◦ Rollover of unspent amounts (configurable)
+        ◦ Savings goal tracking
+    • Investment ROI:
+        ◦ Tech purchase value assessment
+        ◦ Educational return tracking
+        ◦ Comparative analysis of similar purchases
+Acceptance Criteria:
+    • AC-501.1: Add transaction in ≤ 10 seconds
+    • AC-501.2: Budget alerts trigger at correct thresholds
+    • AC-501.3: ROI calculations account for usage frequency and outcomes
+3.6 Goal & Habit Systems (FR-600 Series)
+FR-601: Goal Achievement Framework
+Description: Long-term objective tracking with milestone celebration
+Priority: Medium
+Detailed Specifications:
+    • Goal Properties:
+        ◦ Title, description, category
+        ◦ SMART criteria validation
+        ◦ Timeline with milestone planning
+        ◦ Progress auto-calculation from linked activities
+    • Integration Features:
+        ◦ Task and habit linking
+        ◦ Progress from study sessions and projects
+        ◦ Celebration triggers for milestone completion
+        ◦ Reflection prompts based on goal progress
+Acceptance Criteria:
+    • AC-601.1: Create goal with all fields in < 45 seconds
+    • AC-601.2: Progress updates automatically from linked activities
+    • AC-601.3: Milestone completion triggers appropriate celebration
+FR-602: Habit Formation System
+Description: Streak-based habit tracking with intelligent reminders
+Priority: Medium
+Detailed Specifications:
+    • Habit Properties:
+        ◦ Title, description, category
+        ◦ Frequency: daily/weekly/custom patterns
+        ◦ Streak tracking with best streak recording
+        ◦ Reminder system with optimal timing
+    • Advanced Features:
+        ◦ Habit coupling with goal progress
+        ◦ Difficulty progression
+        ◦ Skip functionality with reason tracking
+        ◦ Recovery patterns after breaks
+Acceptance Criteria:
+    • AC-602.1: Mark habit complete in 1 tap
+    • AC-602.2: Streak calculations handle timezone changes correctly
+    • AC-602.3: Reminders respect device focus/do-not-disturb settings
+3.7 Focus & Productivity (FR-700 Series)
+FR-701: Intelligent Focus Timer
+Description: Pomodoro-based deep work sessions with automatic logging
+Priority: Critical
+Detailed Specifications:
+    • Timer Modes:
+        ◦ Preset durations: 25, 45, 60, 90 minutes
+        ◦ Custom timer creation and saving
+        ◦ Break timing: short (5), long (15), custom
+        ◦ Auto-progression through sessions
+    • Session Features:
+        ◦ Task/project linking
+        ◦ Intent setting for session focus
+        ◦ Distraction logging (minimal input)
+        ◦ Automatic study session creation
+    • Analytics:
+        ◦ Focus time trends by time of day
+        ◦ Productivity correlation with task types
+        ◦ Break effectiveness analysis
+Acceptance Criteria:
+    • AC-701.1: Start focus session in ≤ 3 taps from any screen
+    • AC-701.2: Timer remains accurate when app in background
+    • AC-701.3: Session completion creates appropriate linked records
+3.8 Analytics & Reporting (FR-800 Series)
+FR-801: Comprehensive Analytics Dashboard
+Description: Cross-module insights and trend analysis
+Priority: Medium
+Detailed Specifications:
+    • Visualization Types:
+        ◦ Time series: study hours, focus time, task completion
+        ◦ Categorical: expense breakdown, habit frequency
+        ◦ Progress: goal advancement, project milestones
+        ◦ Correlation: mood vs productivity, study vs performance
+    • Reporting Features:
+        ◦ Custom date range selection
+        ◦ Comparative period analysis
+        ◦ Export capabilities: PNG, PDF, CSV
+        ◦ Insight generation from patterns
+Acceptance Criteria:
+    • AC-801.1: All charts render in < 2 seconds with 1 year of data
+    • AC-801.2: Export functions produce accurate, well-formatted output
+    • AC-801.3: Insights generated are contextually relevant
+3.9 Backup & Security (FR-900 Series)
+FR-901: Robust Data Protection
+Description: Comprehensive backup and encryption systems
+Priority: High
+Detailed Specifications:
+    • Backup System:
+        ◦ Manual and automatic backup scheduling
+        ◦ Multiple formats: JSON (complete), CSV (modular)
+        ◦ Backup rotation and storage management
+        ◦ Integrity verification and repair
+    • Encryption Features:
+        ◦ Optional AES-256 database encryption
+        ◦ Password-protected backup files
+        ◦ Secure key storage using platform keychains
+        ◦ Encryption performance optimization
+Acceptance Criteria:
+    • AC-901.1: Full backup completes in < 30 seconds for 50MB database
+    • AC-901.2: Encrypted database maintains performance (< 10% overhead)
+    • AC-901.3: Restore process handles version differences gracefully
+
+4. External Interface Requirements
+4.1 User Interfaces
+4.1.1 Design System Specifications
+Color Palette:
+css
+/* Primary Colors */
+--primary-50: #f0f9ff;
+--primary-500: #0ea5e9;
+--primary-900: #0c4a6e;
+
+/* Semantic Colors */
+--success: #10b981;
+--warning: #f59e0b;
+--error: #ef4444;
+--info: #3b82f6;
+
+/* Neutral Scale */
+--gray-50: #f9fafb;
+--gray-900: #111827;
+Typography Scale:
+    • Display: 32px (Roboto Bold)
+    • Title: 24px (Roboto SemiBold)
+    • Headline: 20px (Roboto Medium)
+    • Body: 16px (Roboto Regular)
+    • Caption: 14px (Roboto Regular)
+    • Micro: 12px (Roboto Regular)
+Spacing System:
+    • Base unit: 4px
+    • Scale: 4, 8, 12, 16, 20, 24, 32, 40, 48, 64, 80, 96, 128
+4.1.2 Core Screen Specifications
+Dashboard Screen:
+text
+┌─────────────────────────────────────────┐
+│ Status Bar                              │
+├─────────────────────────────────────────┤
+│ Nov 2025                         [≡] [⏰]│
+│ "Wednesday, November 12"               │
+├─────────────────────────────────────────┤
+│ ┌─ Quick Stats ───────────────────────┐ │
+│ │ 2.5h/4h Study    💰 $45.32         │ │
+│ │ 3/5 Tasks       🔥 7-day streak    │ │
+│ └─────────────────────────────────────┘ │
+├─────────────────────────────────────────┤
+│ Today's Focus                           │
+│ ┌─ Active Timer ──────────────────────┐ │
+│ │ 24:32 remaining                    │ │
+│ │ Neural Networks Research           │ │
+│ │ ██████████████◔ 75%               │ │
+│ │ [⏸️] [■]                           │ │
+│ └─────────────────────────────────────┘ │
+├─────────────────────────────────────────┤
+│ Priority Tasks                          │
+│ ✓ Research CNN architectures           │
+│ ◐ Complete literature review           │
+│ ○ Draft project proposal               │
+├─────────────────────────────────────────┤
+│ Weekly Progress                         │
+│ █▁▃▅▃▂▃ Study hours                    │
+│ ▃▅▄▆█▅▄ Focus time                     │
+└─────────────────────────────────────────┘
+[+] Floating Action Button
+Task Detail Screen:
+text
+┌─────────────────────────────────────────┐
+│ ← Tasks                        [⋮] [✓] │
+├─────────────────────────────────────────┤
+│ Implement CNN from scratch              │
+│ Machine Learning Project               │
+│                                        │
+│ ████████████████◔ 85% complete        │
+│ Due: Nov 15, 2025 (3 days)            │
+│                                        │
+│ Priority: High      Est: 6h           │
+│ Tags: #ml #python #research           │
+├─────────────────────────────────────────┤
+│ Description                            │
+│ Build convolutional neural network     │
+│ using TensorFlow for image...         │
+│                                        │
+│ Resources:                             │
+│ • https://tf.org/guide/keras          │
+│ • Deep Learning Book Ch.9             │
+├─────────────────────────────────────────┤
+│ Subtasks (3/5 completed)               │
+│ ✓ Research existing architectures     │
+│ ✓ Setup development environment       │
+│ ✓ Implement basic layers              │
+│ ◐ Train on CIFAR-10                   │
+│ ○ Optimize performance                │
+├─────────────────────────────────────────┤
+│ Recent Activity                        │
+│ Nov 10: 2h focus session              │
+│ Nov 9: Study session (1.5h)           │
+└─────────────────────────────────────────┘
+[▶] [📝] [➕] Action Bar
+4.2 Hardware Interfaces
+4.2.1 Mobile Device Integration
+    • Vibration: Timer completion alerts (configurable patterns)
+    • Biometric Authentication: Optional app locking
+    • Camera: Receipt capture for expense tracking
+    • Storage: Local file system access for backup management
+4.2.2 Desktop Integration
+    • System Tray: Quick access and timer status
+    • Global Shortcuts: System-level keyboard commands
+    • File System: Native file dialogs for import/export
+    • Printing: Report and analytics export to PDF
+4.3 Software Interfaces
+4.3.1 Local Database Interface
+dart
+// Database Service Contract
+abstract class DatabaseService {
+  Future<void> initialize(String? encryptionKey);
+  Future<bool> backup(String filePath);
+  Future<bool> restore(String filePath);
+  Future<List<Map<String, dynamic>>> query(String table, {Map<String, dynamic>? filters});
+  Future<String> insert(String table, Map<String, dynamic> data);
+  Future<bool> update(String table, String id, Map<String, dynamic> data);
+  Future<bool> delete(String table, String id);
+}
+4.3.2 Export/Import Interface
+json
+{
+  "meta": {
+    "version": "2.0",
+    "exported_at": "2025-11-12T10:30:00Z",
+    "schema_version": "1.2",
+    "device_id": "uuid-1234"
+  },
+  "data": {
+    "tasks": [...],
+    "study_sessions": [...],
+    "projects": [...]
+  },
+  "validation": {
+    "checksum": "sha256-hash",
+    "record_count": 1542,
+    "integrity_check": true
+  }
+}
+4.4 Communication Interfaces
+4.4.1 Local Network Protocols
+    • HTTP Server: Optional local web interface for data access
+    • WebSocket: Real-time updates between app instances on same network
+    • Bonjour/mDNS: Automatic service discovery for local sync
+4.4.2 File-based Communication
+    • Watch Folder: Monitor designated folders for import files
+    • Clipboard Integration: Quick data sharing between instances
+    • Share Sheet: Integration with system sharing capabilities
+
+5. System Architecture & Data Design
+5.1 High-Level Architecture
+text
+┌─────────────────────────────────────────────────┐
+│                   UI Layer                      │
+│  ┌─────────────┐ ┌─────────────┐ ┌────────────┐ │
+│  │   Mobile    │ │   Desktop   │ │   Web*     │ │
+│  │ Components  │ │ Components  │ │Components  │ │
+│  └─────────────┘ └─────────────┘ └────────────┘ │
+└─────────────────────────────────────────────────┘
+┌─────────────────────────────────────────────────┐
+│                Service Layer                    │
+│  ┌─────────────┐ ┌─────────────┐ ┌────────────┐ │
+│  │   Task      │ │   Analytics │ │  Backup    │ │
+│  │   Service   │ │   Service   │ │  Service   │ │
+│  └─────────────┘ └─────────────┘ └────────────┘ │
+└─────────────────────────────────────────────────┘
+┌─────────────────────────────────────────────────┐
+│               Repository Layer                  │
+│  ┌─────────────┐ ┌─────────────┐ ┌────────────┐ │
+│  │   Task      │ │   Study     │ │  Project   │ │
+│  │ Repository  │ │ Repository  │ │ Repository │ │
+│  └─────────────┘ └─────────────┘ └────────────┘ │
+└─────────────────────────────────────────────────┘
+┌─────────────────────────────────────────────────┐
+│                 Data Layer                      │
+│  ┌─────────────┐ ┌─────────────┐ ┌────────────┐ │
+│  │   SQLite    │ │   File      │ │  Secure    │ │
+│  │  Database   │ │   System    │ │  Storage   │ │
+│  └─────────────┘ └─────────────┘ └────────────┘ │
+└─────────────────────────────────────────────────┘
+5.2 Complete Database Schema
+5.2.1 Core Tables Definition
+sql
+-- Users table (single user system with metadata)
+CREATE TABLE users (
+    id TEXT PRIMARY KEY,
+    device_id TEXT UNIQUE,
+    name TEXT,
+    email TEXT,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    settings_json TEXT,
+    encryption_enabled BOOLEAN DEFAULT 0,
+    last_backup_at DATETIME,
+    db_version INTEGER DEFAULT 1
+);
+
+-- Tasks and Todos
+CREATE TABLE tasks (
+    id TEXT PRIMARY KEY,
+    title TEXT NOT NULL,
+    description TEXT,
+    priority INTEGER DEFAULT 1, -- 0: Low, 1: Medium, 2: High, 3: Urgent
+    status INTEGER DEFAULT 0, -- 0: Not Started, 1: In Progress, 2: Completed, 3: Cancelled
+    estimated_minutes INTEGER,
+    actual_minutes INTEGER DEFAULT 0,
+    due_date DATETIME,
+    reminder_offset INTEGER, -- minutes before due date
+    project_id TEXT,
+    parent_task_id TEXT,
+    tags_json TEXT, -- JSON array of tags
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (project_id) REFERENCES projects(id),
+    FOREIGN KEY (parent_task_id) REFERENCES tasks(id)
+);
+
+CREATE TABLE todos (
+    id TEXT PRIMARY KEY,
+    title TEXT NOT NULL,
+    category TEXT DEFAULT 'General',
+    priority INTEGER DEFAULT 1,
+    status INTEGER DEFAULT 0,
+    due_date DATETIME,
+    reminder_time DATETIME,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    completed_at DATETIME
+);
+
+-- Study and Knowledge Management
+CREATE TABLE study_sessions (
+    id TEXT PRIMARY KEY,
+    subject TEXT NOT NULL,
+    topic TEXT,
+    subtopic TEXT,
+    minutes INTEGER NOT NULL,
+    resources_json TEXT, -- JSON array of resource objects
+    comprehension_rating INTEGER, -- 1-5
+    linked_task_id TEXT,
+    linked_project_id TEXT,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (linked_task_id) REFERENCES tasks(id),
+    FOREIGN KEY (linked_project_id) REFERENCES projects(id)
+);
+
+CREATE TABLE knowledge_topics (
+    id TEXT PRIMARY KEY,
+    title TEXT NOT NULL,
+    description TEXT,
+    category TEXT,
+    parent_topic_id TEXT,
+    progress_percent INTEGER DEFAULT 0,
+    target_hours INTEGER,
+    current_hours INTEGER DEFAULT 0,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (parent_topic_id) REFERENCES knowledge_topics(id)
+);
+
+-- Projects and Milestones
+CREATE TABLE projects (
+    id TEXT PRIMARY KEY,
+    title TEXT NOT NULL,
+    description TEXT,
+    tech_stack_json TEXT, -- JSON array of technologies
+    status INTEGER DEFAULT 0, -- 0: Idea, 1: Planning, 2: Active, 3: Completed, 4: Archived
+    start_date DATETIME,
+    target_date DATETIME,
+    actual_end_date DATETIME,
+    progress_percent INTEGER DEFAULT 0,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE milestones (
+    id TEXT PRIMARY KEY,
+    project_id TEXT NOT NULL,
+    title TEXT NOT NULL,
+    description TEXT,
+    target_date DATETIME,
+    weight INTEGER DEFAULT 1, -- For progress calculation
+    depends_on TEXT, -- Previous milestone ID
+    status INTEGER DEFAULT 0,
+    completed_date DATETIME,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (project_id) REFERENCES projects(id)
+);
+
+-- Finance Management
+CREATE TABLE finance_entries (
+    id TEXT PRIMARY KEY,
+    entry_date DATE NOT NULL,
+    type INTEGER NOT NULL, -- 0: Expense, 1: Income
+    amount DECIMAL(10,2) NOT NULL,
+    category TEXT NOT NULL,
+    subcategory TEXT,
+    description TEXT,
+    payment_method TEXT,
+    tags_json TEXT,
+    is_tech_investment BOOLEAN DEFAULT 0,
+    roi_rating INTEGER, -- 1-5 for tech investments
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE budgets (
+    id TEXT PRIMARY KEY,
+    category TEXT NOT NULL,
+    subcategory TEXT,
+    amount DECIMAL(10,2) NOT NULL,
+    period TEXT DEFAULT 'monthly', -- monthly, weekly, yearly
+    rollover_unused BOOLEAN DEFAULT 0,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Habits and Goals
+CREATE TABLE habits (
+    id TEXT PRIMARY KEY,
+    title TEXT NOT NULL,
+    description TEXT,
+    frequency TEXT DEFAULT 'daily', -- daily, weekly, custom
+    target_count INTEGER DEFAULT 1, -- For weekly: times per week
+    reminder_time TIME,
+    streak_current INTEGER DEFAULT 0,
+    streak_longest INTEGER DEFAULT 0,
+    linked_goal_id TEXT,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE habit_checks (
+    id TEXT PRIMARY KEY,
+    habit_id TEXT NOT NULL,
+    check_date DATE NOT NULL,
+    completed BOOLEAN DEFAULT 0,
+    notes TEXT,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (habit_id) REFERENCES habits(id),
+    UNIQUE(habit_id, check_date)
+);
+
+CREATE TABLE goals (
+    id TEXT PRIMARY KEY,
+    title TEXT NOT NULL,
+    description TEXT,
+    category TEXT,
+    type TEXT, -- learning, financial, personal, project
+    target_value DECIMAL(10,2),
+    current_value DECIMAL(10,2) DEFAULT 0,
+    target_date DATETIME,
+    progress_percent INTEGER DEFAULT 0,
+    status INTEGER DEFAULT 0, -- 0: Not Started, 1: In Progress, 2: Completed, 3: Abandoned
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Focus and Productivity
+CREATE TABLE focus_sessions (
+    id TEXT PRIMARY KEY,
+    start_time DATETIME NOT NULL,
+    end_time DATETIME,
+    duration_minutes INTEGER,
+    intent_description TEXT,
+    linked_task_id TEXT,
+    linked_project_id TEXT,
+    distractions_count INTEGER DEFAULT 0,
+    completion_status INTEGER DEFAULT 0, -- 0: Completed, 1: Interrupted, 2: Cancelled
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (linked_task_id) REFERENCES tasks(id),
+    FOREIGN KEY (linked_project_id) REFERENCES projects(id)
+);
+
+-- Notes and Reflections
+CREATE TABLE notes (
+    id TEXT PRIMARY KEY,
+    title TEXT,
+    content TEXT NOT NULL,
+    type TEXT DEFAULT 'text', -- text, code, reflection
+    tags_json TEXT,
+    linked_entity_type TEXT, -- task, project, goal
+    linked_entity_id TEXT,
+    is_pinned BOOLEAN DEFAULT 0,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE daily_reflections (
+    id TEXT PRIMARY KEY,
+    reflection_date DATE NOT NULL,
+    went_well TEXT,
+    improve TEXT,
+    gratitude TEXT,
+    mood_rating INTEGER, -- 1-5
+    goals_progress TEXT,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE(reflection_date)
+);
+
+-- System and Backup
+CREATE TABLE backups (
+    id TEXT PRIMARY KEY,
+    file_path TEXT NOT NULL,
+    file_size INTEGER,
+    record_count INTEGER,
+    checksum TEXT,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE app_events (
+    id TEXT PRIMARY KEY,
+    event_type TEXT NOT NULL,
+    event_data TEXT,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+5.2.2 Indexes for Performance
+sql
+-- Performance-critical indexes
+CREATE INDEX idx_tasks_status_due ON tasks(status, due_date);
+CREATE INDEX idx_tasks_project ON tasks(project_id);
+CREATE INDEX idx_study_sessions_date ON study_sessions(created_at);
+CREATE INDEX idx_finance_entries_date_category ON finance_entries(entry_date, category);
+CREATE INDEX idx_habit_checks_date ON habit_checks(check_date);
+CREATE INDEX idx_focus_sessions_date ON focus_sessions(start_time);
+CREATE INDEX idx_notes_linked ON notes(linked_entity_type, linked_entity_id);
+5.3 Data Dictionary
+5.3.1 Field Specifications
+Table
+Field
+Type
+Constraints
+Description
+tasks
+priority
+INTEGER
+0-3
+0=Low,1=Medium,2=High,3=Urgent
+tasks
+status
+INTEGER
+0-3
+0=Not Started,1=In Progress,2=Completed,3=Cancelled
+finance_entries
+amount
+DECIMAL(10,2)
+≥ 0.01
+Monetary amount in base currency
+study_sessions
+minutes
+INTEGER
+1-1440
+Duration in minutes (1 min - 24 hours)
+habits
+streak_current
+INTEGER
+≥ 0
+Current consecutive completion streak
+focus_sessions
+duration_minutes
+INTEGER
+1-480
+1 minute to 8 hours maximum
+5.3.2 Data Validation Rules
+    • Task Due Dates: Must be ≥ creation date
+    • Study Session Duration: 1-1440 minutes (24 hours)
+    • Financial Amounts: Positive values only, 2 decimal precision
+    • Progress Percentages: 0-100 integer values
+    • Date Fields: ISO 8601 format (YYYY-MM-DD or YYYY-MM-DDTHH:MM:SSZ)
+5.4 Backup Schema Specification
+5.4.1 JSON Export Format
+json
+{
+  "meta": {
+    "app_name": "TechLog",
+    "version": "2.0",
+    "exported_at": "2025-11-12T10:30:00Z",
+    "schema_version": "1.2",
+    "device_id": "uuid-1234-5678",
+    "record_counts": {
+      "tasks": 45,
+      "study_sessions": 128,
+      "projects": 8,
+      "finance_entries": 267
+    }
+  },
+  "settings": {
+    "user_preferences": {...},
+    "app_configuration": {...}
+  },
+  "data": {
+    "tasks": [...],
+    "todos": [...],
+    "study_sessions": [...],
+    "knowledge_topics": [...],
+    "projects": [...],
+    "milestones": [...],
+    "finance_entries": [...],
+    "budgets": [...],
+    "habits": [...],
+    "habit_checks": [...],
+    "goals": [...],
+    "focus_sessions": [...],
+    "notes": [...],
+    "daily_reflections": [...]
+  },
+  "validation": {
+    "checksum": "sha256-abc123...",
+    "data_integrity": true,
+    "foreign_key_consistency": true
+  }
+}
+5.4.2 Import Validation Rules
+    • Schema Validation: Verify JSON structure against expected schema
+    • Data Type Checking: Ensure field types match expected formats
+    • Referential Integrity: Validate foreign key relationships
+    • Conflict Resolution: Handle duplicate records with user prompts
+    • Version Compatibility: Support backward compatibility for older exports
+

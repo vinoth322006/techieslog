@@ -372,32 +372,78 @@ class _GoalDetailScreenState extends State<GoalDetailScreen> {
   }
 
   Widget _buildProgressHistorySection(bool isDark) {
+    // Sort history by date (newest first)
+    final sortedHistory = List<GoalProgress>.from(_currentGoal.progressHistory!)
+      ..sort((a, b) => b.recordedAt.compareTo(a.recordedAt));
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          'Progress History',
-          style: TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.w700,
-            color: isDark ? Colors.white : Colors.black,
-          ),
+        Row(
+          children: [
+            Icon(
+              Icons.history_rounded,
+              color: Colors.pink,
+              size: 20,
+            ),
+            const SizedBox(width: 8),
+            Text(
+              'Progress History',
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.w800,
+                color: isDark ? Colors.white : Colors.black,
+              ),
+            ),
+            const Spacer(),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+              decoration: BoxDecoration(
+                color: Colors.pink.withOpacity(0.15),
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Text(
+                '${sortedHistory.length} updates',
+                style: const TextStyle(
+                  fontSize: 11,
+                  fontWeight: FontWeight.w600,
+                  color: Colors.pink,
+                ),
+              ),
+            ),
+          ],
         ),
-        const SizedBox(height: 12),
+        const SizedBox(height: 16),
         ListView.builder(
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
-          itemCount: _currentGoal.progressHistory!.length,
+          itemCount: sortedHistory.length,
           itemBuilder: (context, index) {
-            final progress = _currentGoal.progressHistory![index];
+            final progress = sortedHistory[index];
+            final isLatest = index == 0;
+            final progressPercent = (_currentGoal.targetValue != null && _currentGoal.targetValue! > 0)
+                ? ((progress.value / _currentGoal.targetValue!) * 100).toInt()
+                : 0;
+            
             return Container(
               margin: const EdgeInsets.only(bottom: 12),
-              padding: const EdgeInsets.all(12),
+              padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
-                color: Colors.pink.withOpacity(0.1),
-                borderRadius: BorderRadius.circular(8),
+                gradient: isLatest
+                    ? LinearGradient(
+                        colors: [
+                          Colors.pink.withOpacity(0.15),
+                          Colors.pink.withOpacity(0.05),
+                        ],
+                      )
+                    : null,
+                color: isLatest ? null : Colors.pink.withOpacity(0.08),
+                borderRadius: BorderRadius.circular(12),
                 border: Border.all(
-                  color: Colors.pink.withOpacity(0.3),
+                  color: isLatest
+                      ? Colors.pink.withOpacity(0.4)
+                      : Colors.pink.withOpacity(0.2),
+                  width: isLatest ? 2 : 1,
                 ),
               ),
               child: Column(
@@ -406,28 +452,99 @@ class _GoalDetailScreenState extends State<GoalDetailScreen> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(
-                        '${progress.value.toInt()} / ${_currentGoal.targetValue?.toInt() ?? 100}',
-                        style: const TextStyle(
-                          fontWeight: FontWeight.w600,
-                          fontSize: 12,
-                        ),
+                      Row(
+                        children: [
+                          Container(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 12,
+                              vertical: 6,
+                            ),
+                            decoration: BoxDecoration(
+                              color: Colors.pink,
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            child: Text(
+                              '${progress.value.toInt()} / ${_currentGoal.targetValue?.toInt() ?? 100} ${_currentGoal.unit ?? ''}',
+                              style: const TextStyle(
+                                fontWeight: FontWeight.w800,
+                                fontSize: 14,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                          const SizedBox(width: 8),
+                          Container(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 8,
+                              vertical: 4,
+                            ),
+                            decoration: BoxDecoration(
+                              color: isLatest ? Colors.green : Colors.pink.withOpacity(0.3),
+                              borderRadius: BorderRadius.circular(6),
+                            ),
+                            child: Text(
+                              isLatest ? 'Latest' : '$progressPercent%',
+                              style: TextStyle(
+                                fontSize: 10,
+                                fontWeight: FontWeight.w700,
+                                color: isLatest ? Colors.white : Colors.pink,
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
-                      Text(
-                        '${progress.recordedAt.day}/${progress.recordedAt.month}/${progress.recordedAt.year}',
-                        style: const TextStyle(
-                          fontSize: 10,
-                          color: Colors.grey,
-                        ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          Text(
+                            '${progress.recordedAt.day}/${progress.recordedAt.month}/${progress.recordedAt.year}',
+                            style: TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.w600,
+                              color: isDark ? Colors.white70 : Colors.black87,
+                            ),
+                          ),
+                          Text(
+                            '${progress.recordedAt.hour.toString().padLeft(2, '0')}:${progress.recordedAt.minute.toString().padLeft(2, '0')}',
+                            style: const TextStyle(
+                              fontSize: 10,
+                              color: Colors.grey,
+                            ),
+                          ),
+                        ],
                       ),
                     ],
                   ),
-                  if (progress.notes != null) ...[
-                    const SizedBox(height: 8),
-                    Text(
-                      progress.notes!,
-                      style: const TextStyle(
-                        fontSize: 11,
+                  if (progress.notes != null && progress.notes!.isNotEmpty) ...[
+                    const SizedBox(height: 12),
+                    Container(
+                      padding: const EdgeInsets.all(10),
+                      decoration: BoxDecoration(
+                        color: isDark
+                            ? Colors.black.withOpacity(0.2)
+                            : Colors.white.withOpacity(0.5),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Icon(
+                            Icons.note_rounded,
+                            size: 14,
+                            color: Colors.pink.withOpacity(0.7),
+                          ),
+                          const SizedBox(width: 8),
+                          Expanded(
+                            child: Text(
+                              progress.notes!,
+                              style: TextStyle(
+                                fontSize: 13,
+                                color: isDark ? Colors.white : Colors.black87,
+                                height: 1.4,
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   ],
