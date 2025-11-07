@@ -1,4 +1,4 @@
-package com.example.techieslog
+package com.vinoth.techieslog
 
 import io.flutter.embedding.android.FlutterActivity
 
