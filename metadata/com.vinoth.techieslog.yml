@@ -1,0 +1,33 @@
+Categories:
+  - Productivity
+  - Finance
+
+License: MIT
+AuthorName: Vinoth
+AuthorEmail: (optional) 
+SourceCode: https://github.com/vinoth322006/techieslog
+IssueTracker: https://github.com/vinoth322006/techieslog/issues
+Name: TechiesLog
+Summary: Offline productivity and expense tracker app for students
+Description: |-
+  TechiesLog is a privacy-friendly offline productivity and personal finance tracking
+  app built using Flutter. It helps students record expenses, manage tasks, track
+  streaks, and organize their daily activities without any internet connection.
+  100% open-source. No ads, no analytics, no tracking.
+
+RepoType: git
+Repo: https://github.com/vinoth322006/techieslog.git
+
+Builds:
+  - versionName: 1.0.0
+    versionCode: 1
+    commit: v1.0.0+1
+    subdir: android
+    gradle:
+      - yes
+    output: build/app/outputs/flutter-apk/app-release.apk
+
+AutoUpdateMode: Version
+UpdateCheckMode: Tags
+CurrentVersion: 1.0.0
+CurrentVersionCode: 1
