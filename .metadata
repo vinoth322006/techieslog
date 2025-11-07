@@ -1,45 +1,33 @@
-# This file tracks properties of this Flutter project.
-# Used by Flutter tool to assess capabilities and perform upgrades etc.
-#
-# This file should be version controlled and should not be manually edited.
+Categories:
+  - Productivity
+  - Finance
 
-version:
-  revision: "adc901062556672b4138e18a4dc62a4be8f4b3c2"
-  channel: "stable"
+License: MIT
+AuthorName: Vinoth
+AuthorEmail: (optional) 
+SourceCode: https://github.com/vinoth322006/techieslog
+IssueTracker: https://github.com/vinoth322006/techieslog/issues
+Name: TechiesLog
+Summary: Offline productivity and expense tracker app for students
+Description: |-
+  TechiesLog is a privacy-friendly offline productivity and personal finance tracking
+  app built using Flutter. It helps students record expenses, manage tasks, track
+  streaks, and organize their daily activities without any internet connection.
+  100% open-source. No ads, no analytics, no tracking.
 
-project_type: app
+RepoType: git
+Repo: https://github.com/vinoth322006/techieslog.git
 
-# Tracks metadata for the flutter migrate command
-migration:
-  platforms:
-    - platform: root
-      create_revision: adc901062556672b4138e18a4dc62a4be8f4b3c2
-      base_revision: adc901062556672b4138e18a4dc62a4be8f4b3c2
-    - platform: android
-      create_revision: adc901062556672b4138e18a4dc62a4be8f4b3c2
-      base_revision: adc901062556672b4138e18a4dc62a4be8f4b3c2
-    - platform: ios
-      create_revision: adc901062556672b4138e18a4dc62a4be8f4b3c2
-      base_revision: adc901062556672b4138e18a4dc62a4be8f4b3c2
-    - platform: linux
-      create_revision: adc901062556672b4138e18a4dc62a4be8f4b3c2
-      base_revision: adc901062556672b4138e18a4dc62a4be8f4b3c2
-    - platform: macos
-      create_revision: adc901062556672b4138e18a4dc62a4be8f4b3c2
-      base_revision: adc901062556672b4138e18a4dc62a4be8f4b3c2
-    - platform: web
-      create_revision: adc901062556672b4138e18a4dc62a4be8f4b3c2
-      base_revision: adc901062556672b4138e18a4dc62a4be8f4b3c2
-    - platform: windows
-      create_revision: adc901062556672b4138e18a4dc62a4be8f4b3c2
-      base_revision: adc901062556672b4138e18a4dc62a4be8f4b3c2
+Builds:
+  - versionName: 1.0.0
+    versionCode: 1
+    commit: v1.0.0+1
+    subdir: android
+    gradle:
+      - yes
+    output: build/app/outputs/flutter-apk/app-release.apk
 
-  # User provided section
-
-  # List of Local paths (relative to this file) that should be
-  # ignored by the migrate tool.
-  #
-  # Files that are not part of the templates will be ignored by default.
-  unmanaged_files:
-    - 'lib/main.dart'
-    - 'ios/Runner.xcodeproj/project.pbxproj'
+AutoUpdateMode: Version
+UpdateCheckMode: Tags
+CurrentVersion: 1.0.0
+CurrentVersionCode: 1
