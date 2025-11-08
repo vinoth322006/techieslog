@@ -29,13 +29,6 @@
 |-----------|----------|-------|-------|
 | ![Dashboard](screenshots/dashboard.png) | ![Expenses](screenshots/expenses.png) | ![Tasks](screenshots/tasks.png) | ![Goals](screenshots/goals.png) |
 
-## 📦 Installation
-
-### F-Droid
-TechiesLog is available on [F-Droid](https://f-droid.org/packages/com.vinoth.techieslog/).
-
-[<img src="https://fdroid.gitlab.io/artwork/badge/get-it-on.png" alt="Get it on F-Droid" height="80">](https://f-droid.org/packages/com.vinoth.techieslog/)
-
 ### Manual Installation
 1. Download the latest APK from the [Releases](https://github.com/vinoth322006/techieslog/releases) page
 2. Enable "Install from Unknown Sources" in your device settings
@@ -78,8 +71,7 @@ lib/
 
 ## 🤝 Contributing
 
-Contributions are welcome! Please read our [Contributing Guidelines](CONTRIBUTING.md) to get started.
-
+Contributions are welcome! 
 1. Fork the repository
 2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
 3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
@@ -97,8 +89,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - The open-source community for inspiration and support
 
 ## 📬 Contact
-
-Vinoth - [@your_twitter](https://twitter.com/your_twitter)
 
 Project Link: [https://github.com/vinoth322006/techieslog](https://github.com/vinoth322006/techieslog)
 
