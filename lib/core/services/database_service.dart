@@ -17,7 +17,7 @@ class DatabaseService {
 
     return await openDatabase(
       path,
-      version: 4,
+      version: 5,
       onCreate: _createDB,
       onUpgrade: _upgradeDB,
     );
@@ -319,28 +319,73 @@ class DatabaseService {
   }
 
   Future<void> _upgradeDB(Database db, int oldVersion, int newVersion) async {
-    if (oldVersion < 4) {
-      // Drop all old tables and recreate with new schema
-      await db.execute('DROP TABLE IF EXISTS tasks');
-      await db.execute('DROP TABLE IF EXISTS study_sessions');
-      await db.execute('DROP TABLE IF EXISTS projects');
-      await db.execute('DROP TABLE IF EXISTS milestones');
-      await db.execute('DROP TABLE IF EXISTS todos');
-      await db.execute('DROP TABLE IF EXISTS finance_entries');
-      await db.execute('DROP TABLE IF EXISTS budgets');
-      await db.execute('DROP TABLE IF EXISTS habits');
-      await db.execute('DROP TABLE IF EXISTS habit_checks');
-      await db.execute('DROP TABLE IF EXISTS goals');
-      await db.execute('DROP TABLE IF EXISTS knowledge_topics');
-      await db.execute('DROP TABLE IF EXISTS learning_resources');
-      await db.execute('DROP TABLE IF EXISTS notes');
-      await db.execute('DROP TABLE IF EXISTS daily_reflections');
-      await db.execute('DROP TABLE IF EXISTS daily_logs');
-      await db.execute('DROP TABLE IF EXISTS focus_sessions');
-      
-      // Recreate all tables with updated schema
-      await _createDB(db, newVersion);
+    // Incremental migrations to preserve data
+    if (oldVersion < 2) {
+      // Add new columns if needed for version 2
+      try {
+        await db.execute('ALTER TABLE projects ADD COLUMN owner TEXT');
+        await db.execute('ALTER TABLE projects ADD COLUMN tags TEXT');
+        await db.execute('ALTER TABLE projects ADD COLUMN links TEXT');
+      } catch (e) {
+        debugPrint('Migration v2 error (may be expected): $e');
+      }
     }
+    
+    if (oldVersion < 3) {
+      // Add new columns if needed for version 3
+      try {
+        await db.execute('ALTER TABLE goals ADD COLUMN reason TEXT');
+        await db.execute('ALTER TABLE goals ADD COLUMN strategy TEXT');
+        await db.execute('ALTER TABLE goals ADD COLUMN progress_history TEXT');
+      } catch (e) {
+        debugPrint('Migration v3 error (may be expected): $e');
+      }
+    }
+    
+    if (oldVersion < 4) {
+      // Add new columns if needed for version 4
+      try {
+        await db.execute('ALTER TABLE daily_logs ADD COLUMN mood TEXT');
+        await db.execute('ALTER TABLE daily_logs ADD COLUMN tags_json TEXT');
+      } catch (e) {
+        debugPrint('Migration v4 error (may be expected): $e');
+      }
+    }
+    
+    if (oldVersion < 5) {
+      // Add new columns if needed for version 5
+      try {
+        await db.execute('ALTER TABLE projects ADD COLUMN progress_history TEXT');
+      } catch (e) {
+        debugPrint('Migration v5 error (may be expected): $e');
+      }
+    }
+    
+    // Note: If you need to do a complete schema reset (ONLY during development),
+    // manually delete the app data or increment the version and uncomment below:
+    // await _resetDatabase(db, newVersion);
+  }
+  
+  // Only use this during development to reset the database completely
+  Future<void> _resetDatabase(Database db, int version) async {
+    await db.execute('DROP TABLE IF EXISTS tasks');
+    await db.execute('DROP TABLE IF EXISTS study_sessions');
+    await db.execute('DROP TABLE IF EXISTS projects');
+    await db.execute('DROP TABLE IF EXISTS milestones');
+    await db.execute('DROP TABLE IF EXISTS todos');
+    await db.execute('DROP TABLE IF EXISTS finance_entries');
+    await db.execute('DROP TABLE IF EXISTS budgets');
+    await db.execute('DROP TABLE IF EXISTS habits');
+    await db.execute('DROP TABLE IF EXISTS habit_checks');
+    await db.execute('DROP TABLE IF EXISTS goals');
+    await db.execute('DROP TABLE IF EXISTS knowledge_topics');
+    await db.execute('DROP TABLE IF EXISTS learning_resources');
+    await db.execute('DROP TABLE IF EXISTS notes');
+    await db.execute('DROP TABLE IF EXISTS daily_reflections');
+    await db.execute('DROP TABLE IF EXISTS daily_logs');
+    await db.execute('DROP TABLE IF EXISTS focus_sessions');
+    
+    await _createDB(db, version);
   }
 
   Future<void> initialize() async {

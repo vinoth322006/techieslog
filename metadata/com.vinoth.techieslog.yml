@@ -4,16 +4,50 @@ Categories:
 
 License: MIT
 AuthorName: Vinoth
-AuthorEmail: (optional) 
+AuthorEmail: vinoth322006@example.com
 SourceCode: https://github.com/vinoth322006/techieslog
 IssueTracker: https://github.com/vinoth322006/techieslog/issues
+Changelog: https://github.com/vinoth322006/techieslog/blob/main/CHANGELOG.md
+
 Name: TechiesLog
-Summary: Offline productivity and expense tracker app for students
+Summary: Privacy-focused offline productivity and finance tracker
+
 Description: |-
-  TechiesLog is a privacy-friendly offline productivity and personal finance tracking
-  app built using Flutter. It helps students record expenses, manage tasks, track
-  streaks, and organize their daily activities without any internet connection.
-  100% open-source. No ads, no analytics, no tracking.
+  TechiesLog is a comprehensive, privacy-focused productivity and personal finance 
+  tracking app designed specifically for students and tech professionals.
+  
+  <b>Privacy First:</b>
+  • 100% offline - no internet connection required
+  • All data stored locally on your device
+  • No ads, no analytics, no tracking
+  • No account registration needed
+  
+  <b>Key Features:</b>
+  
+  <b>Productivity Tracking:</b>
+  • Task Manager with priorities and due dates
+  • Quick Todo list
+  • Project tracking with progress monitoring
+  • Goal setting and achievement tracking
+  • Habit tracker with streak counting
+  
+  <b>Finance Management:</b>
+  • Expense and income tracking
+  • Budget management
+  • Financial analytics
+  • Category-based organization
+  
+  <b>Journaling:</b>
+  • Daily logs with mood tracking
+  • Notes with tags
+  • Daily reflections
+  
+  <b>Design:</b>
+  • Beautiful dark and light themes
+  • Modern, intuitive interface
+  • Smooth animations
+  
+  Built with Flutter. Open source (MIT License). Your data never leaves your device.
 
 RepoType: git
 Repo: https://github.com/vinoth322006/techieslog.git
@@ -21,11 +55,18 @@ Repo: https://github.com/vinoth322006/techieslog.git
 Builds:
   - versionName: 1.0.0
     versionCode: 1
-    commit: v1.0.0+1
-    subdir: android
+    commit: v1.0.0
+    subdir: android/app
+    sudo:
+      - apt-get update
+      - apt-get install -y openjdk-17-jdk-headless
+      - update-java-alternatives -a
     gradle:
       - yes
     output: build/app/outputs/flutter-apk/app-release.apk
+    prebuild: echo "flutter.sdk=$FLUTTER_ROOT" > ../local.properties
+    scandelete:
+      - .pub-cache
 
 AutoUpdateMode: Version
 UpdateCheckMode: Tags

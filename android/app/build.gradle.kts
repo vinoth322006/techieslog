@@ -1,3 +1,10 @@
+plugins {
+    id("com.android.application")
+    id("kotlin-android")
+    // The Flutter Gradle Plugin must be applied after the Android and Kotlin Gradle plugins.
+    id("dev.flutter.flutter-gradle-plugin")
+}
+
 android {
     namespace = "com.vinoth.techieslog"
     compileSdk = flutter.compileSdkVersion
@@ -14,7 +21,7 @@ android {
     }
 
     defaultConfig {
-        applicationId = "com.vinoth.techieslog"   // ✅ Unique ID
+        applicationId = "com.vinoth.techieslog"
         minSdk = flutter.minSdkVersion
         targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode
@@ -23,9 +30,18 @@ android {
 
     buildTypes {
         release {
-            // ✅ Remove signing — F-Droid will sign automatically
+            // F-Droid will handle signing
+            signingConfig = null
             isMinifyEnabled = false
             isShrinkResources = false
         }
     }
+}
+
+flutter {
+    source = "../.."
+}
+
+dependencies {
+    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.4")
 }

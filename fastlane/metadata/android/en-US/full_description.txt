@@ -1,0 +1,46 @@
+TechiesLog is a comprehensive, privacy-focused productivity and personal finance tracking app designed specifically for students and tech professionals.
+
+🔒 PRIVACY FIRST
+• 100% offline - no internet connection required
+• All data stored locally on your device
+• No ads, no analytics, no tracking
+• No account registration needed
+• Your data never leaves your device
+
+✨ KEY FEATURES
+
+📊 PRODUCTIVITY TRACKING
+• Task Manager - Organize tasks with priorities, due dates, and categories
+• Todo List - Quick capture for daily tasks
+• Project Tracking - Monitor progress on long-term projects
+• Goal Setting - Set and track personal and professional goals
+• Habit Tracker - Build positive habits with streak tracking
+
+💰 FINANCE MANAGEMENT
+• Expense Tracking - Log daily expenses with categories
+• Income Tracking - Record all income sources
+• Budget Management - Set and monitor monthly budgets
+• Financial Analytics - Visualize spending patterns
+• Tech Investment Tracking - Track ROI on tech purchases
+
+📝 JOURNALING
+• Daily Logs - Record daily activities and thoughts
+• Mood Tracking - Track your emotional well-being
+• Notes - Create notes with tags and linking
+• Reflections - Daily reflection prompts
+
+🎨 BEAUTIFUL DESIGN
+• Modern, clean interface
+• Dark and Light themes
+• Smooth animations
+• Intuitive navigation
+• Responsive layout
+
+🚀 TECHNICAL HIGHLIGHTS
+• Built with Flutter for smooth performance
+• SQLite database for reliable local storage
+• Offline-first architecture
+• No permissions required
+• Open source (MIT License)
+
+Perfect for students, freelancers, and anyone who wants to stay organized while maintaining complete privacy and control over their data.

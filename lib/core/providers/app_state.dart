@@ -146,12 +146,18 @@ class AppState with ChangeNotifier {
     final index = _tasks.indexWhere((t) => t.id == task.id);
     if (index != -1) {
       _tasks[index] = task;
-      notifyListeners();
+      notifyListeners(); // Notify UI immediately
+      debugPrint('Task updated: ${task.title}, status: ${task.status}');
+      try {
+        await _db.update('tasks', task.id, task.toMap());
+        debugPrint('Task saved to database successfully');
+      } catch (e, st) {
+        debugPrint('Error updating task: $e');
+        debugPrint('Stack trace: $st');
+      }
+    } else {
+      debugPrint('Task not found for update: ${task.id}');
     }
-    _db.update('tasks', task.id, task.toMap()).onError((e, st) {
-      debugPrint('Error updating task: $e');
-      return false;
-    });
   }
 
   Future<void> deleteTask(String taskId) async {

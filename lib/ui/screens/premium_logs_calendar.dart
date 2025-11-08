@@ -348,7 +348,7 @@ class _PremiumLogsCalendarState extends State<PremiumLogsCalendar> with SingleTi
                 ],
               ),
               const SizedBox(height: 10),
-              SizedBox(width: double.infinity, child: ElevatedButton.icon(onPressed: () => _addLog(context, titleController, contentController, selectedCategory, selectedMood), icon: const Icon(Icons.add_rounded, size: 18), label: const Text('Save Log'), style: ElevatedButton.styleFrom(backgroundColor: Colors.teal))),
+              SizedBox(width: double.infinity, child: ElevatedButton.icon(onPressed: () => _addLog(context, titleController, contentController, selectedCategory, selectedMood), icon: const Icon(Icons.add_rounded, size: 18, color: Colors.white), label: const Text('Save Log', style: TextStyle(color: Colors.white)), style: ElevatedButton.styleFrom(backgroundColor: Colors.teal, foregroundColor: Colors.white))),
             ],
           ),
         );
@@ -403,7 +403,7 @@ class _PremiumLogsCalendarState extends State<PremiumLogsCalendar> with SingleTi
     );
   }
 
-  void _addLog(BuildContext context, TextEditingController titleController, TextEditingController contentController, String category, String mood) {
+  Future<void> _addLog(BuildContext context, TextEditingController titleController, TextEditingController contentController, String category, String mood) async {
     if (titleController.text.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Please enter a title')));
       return;
@@ -426,7 +426,7 @@ class _PremiumLogsCalendarState extends State<PremiumLogsCalendar> with SingleTi
       updatedAt: now,
     );
 
-    appState.dailyLogs.add(newLog);
+    await appState.addDailyLog(newLog);
     titleController.clear();
     contentController.clear();
     setState(() {});
@@ -436,7 +436,7 @@ class _PremiumLogsCalendarState extends State<PremiumLogsCalendar> with SingleTi
 
   void _deleteLog(DailyLog log, BuildContext context) {
     final appState = Provider.of<AppState>(context, listen: false);
-    appState.dailyLogs.removeWhere((l) => l.id == log.id);
+    appState.deleteDailyLog(log.id);
     setState(() {});
 
     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Log deleted'), duration: Duration(seconds: 1)));
@@ -615,10 +615,11 @@ class _PremiumLogsCalendarState extends State<PremiumLogsCalendar> with SingleTi
                           Expanded(
                             child: ElevatedButton.icon(
                               onPressed: () => Navigator.pop(context),
-                              icon: const Icon(Icons.close_rounded, size: 18),
-                              label: const Text('Cancel'),
+                              icon: const Icon(Icons.close_rounded, size: 18, color: Colors.white),
+                              label: const Text('Cancel', style: TextStyle(color: Colors.white)),
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: Colors.grey.withOpacity(0.6),
+                                foregroundColor: Colors.white,
                               ),
                             ),
                           ),
@@ -629,10 +630,11 @@ class _PremiumLogsCalendarState extends State<PremiumLogsCalendar> with SingleTi
                                 _addLog(context, titleController, contentController, selectedCategory, selectedMood);
                                 Navigator.pop(context);
                               },
-                              icon: const Icon(Icons.check_rounded, size: 18),
-                              label: const Text('Save Log'),
+                              icon: const Icon(Icons.check_rounded, size: 18, color: Colors.white),
+                              label: const Text('Save Log', style: TextStyle(color: Colors.white)),
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: Colors.teal,
+                                foregroundColor: Colors.white,
                               ),
                             ),
                           ),
@@ -965,9 +967,9 @@ class _PremiumLogsCalendarState extends State<PremiumLogsCalendar> with SingleTi
                                           await appState.deleteNote(note!.id);
                                           ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Note deleted'), duration: Duration(seconds: 1)));
                                         },
-                                        icon: const Icon(Icons.delete_outline_rounded, size: 18),
-                                        label: const Text('Delete'),
-                                        style: ElevatedButton.styleFrom(backgroundColor: Colors.red.withOpacity(0.8)),
+                                        icon: const Icon(Icons.delete_outline_rounded, size: 18, color: Colors.white),
+                                        label: const Text('Delete', style: TextStyle(color: Colors.white)),
+                                        style: ElevatedButton.styleFrom(backgroundColor: Colors.red.withOpacity(0.8), foregroundColor: Colors.white),
                                       ),
                                     ),
                                   if (isEditing) const SizedBox(width: 12),
@@ -1007,9 +1009,9 @@ class _PremiumLogsCalendarState extends State<PremiumLogsCalendar> with SingleTi
                                           ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Note saved! ✓'), duration: Duration(seconds: 1)));
                                         }
                                       },
-                                      icon: const Icon(Icons.check_rounded, size: 18),
-                                      label: Text(isEditing ? 'Update' : 'Save'),
-                                      style: ElevatedButton.styleFrom(backgroundColor: Colors.teal),
+                                      icon: const Icon(Icons.check_rounded, size: 18, color: Colors.white),
+                                      label: Text(isEditing ? 'Update' : 'Save', style: const TextStyle(color: Colors.white)),
+                                      style: ElevatedButton.styleFrom(backgroundColor: Colors.teal, foregroundColor: Colors.white),
                                     ),
                                   ),
                                 ],

@@ -872,9 +872,9 @@ class _PremiumHubCompleteState extends State<PremiumHubComplete>
                   width: double.infinity,
                   child: ElevatedButton.icon(
                     onPressed: () => _showAddProjectDialog(context),
-                    icon: const Icon(Icons.add_rounded),
-                    label: const Text('Add New Project'),
-                    style: ElevatedButton.styleFrom(backgroundColor: Colors.purple, padding: const EdgeInsets.symmetric(vertical: 12)),
+                    icon: const Icon(Icons.add_rounded, color: Colors.white),
+                    label: const Text('Add New Project', style: TextStyle(color: Colors.white)),
+                    style: ElevatedButton.styleFrom(backgroundColor: Colors.purple, foregroundColor: Colors.white, padding: const EdgeInsets.symmetric(vertical: 12)),
                   ),
                 ),
                 const SizedBox(height: 20),
@@ -1122,8 +1122,9 @@ class _PremiumHubCompleteState extends State<PremiumHubComplete>
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.purple,
+                foregroundColor: Colors.white,
               ),
-              child: const Text('Create Project'),
+              child: const Text('Create Project', style: TextStyle(color: Colors.white)),
             ),
           ],
         ),
@@ -1359,6 +1360,33 @@ class _PremiumHubCompleteState extends State<PremiumHubComplete>
     );
   }
 
+  void _showDeleteConfirmation(BuildContext context, String title, String message, VoidCallback onConfirm) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(title),
+        content: Text(message),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Cancel'),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              Navigator.pop(context);
+              onConfirm();
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.red,
+              foregroundColor: Colors.white,
+            ),
+            child: const Text('Delete', style: TextStyle(color: Colors.white)),
+          ),
+        ],
+      ),
+    );
+  }
+
   void _showUpdateProjectProgressDialog(Project project) {
     int sliderValue = project.progressPercent;
     final notesController = TextEditingController();
@@ -1488,8 +1516,9 @@ class _PremiumHubCompleteState extends State<PremiumHubComplete>
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.purple,
+                foregroundColor: Colors.white,
               ),
-              child: const Text('Update Progress'),
+              child: const Text('Update Progress', style: TextStyle(color: Colors.white)),
             ),
           ],
         ),
@@ -1619,9 +1648,14 @@ class _PremiumHubCompleteState extends State<PremiumHubComplete>
                           color: Colors.blue.withOpacity(0.7),
                         ),
                       ),
-                      const SizedBox(width: 12),
+                      const SizedBox(width: 20),
                       GestureDetector(
-                        onTap: () => appState.deleteProject(project.id),
+                        onTap: () => _showDeleteConfirmation(
+                          context,
+                          'Delete Project',
+                          'Are you sure you want to delete "${project.title}"? This action cannot be undone.',
+                          () => appState.deleteProject(project.id),
+                        ),
                         child: Icon(
                           Icons.delete_outline_rounded,
                           size: 18,
@@ -1686,10 +1720,11 @@ class _PremiumHubCompleteState extends State<PremiumHubComplete>
                 width: double.infinity,
                 child: ElevatedButton.icon(
                   onPressed: () => _showUpdateProjectProgressDialog(project),
-                  icon: const Icon(Icons.trending_up_rounded, size: 14),
-                  label: const Text('Update Progress'),
+                  icon: const Icon(Icons.trending_up_rounded, size: 14, color: Colors.white),
+                  label: const Text('Update Progress', style: TextStyle(color: Colors.white)),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: color,
+                    foregroundColor: Colors.white,
                     padding: const EdgeInsets.symmetric(vertical: 8),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(6),
@@ -1901,8 +1936,9 @@ class _PremiumHubCompleteState extends State<PremiumHubComplete>
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.purple,
+                foregroundColor: Colors.white,
               ),
-              child: const Text('Update Project'),
+              child: const Text('Update Project', style: TextStyle(color: Colors.white)),
             ),
           ],
         ),
@@ -1976,9 +2012,9 @@ class _HabitsTabState extends State<HabitsTab> {
                   width: double.infinity,
                   child: ElevatedButton.icon(
                     onPressed: () => _showAddHabitDialog(context),
-                    icon: const Icon(Icons.add_rounded),
-                    label: const Text('Add New Habit'),
-                    style: ElevatedButton.styleFrom(backgroundColor: Colors.orange, padding: const EdgeInsets.symmetric(vertical: 12)),
+                    icon: const Icon(Icons.add_rounded, color: Colors.white),
+                    label: const Text('Add New Habit', style: TextStyle(color: Colors.white)),
+                    style: ElevatedButton.styleFrom(backgroundColor: Colors.orange, foregroundColor: Colors.white, padding: const EdgeInsets.symmetric(vertical: 12)),
                   ),
                 ),
                 const SizedBox(height: 20),
@@ -2167,12 +2203,17 @@ class _HabitsTabState extends State<HabitsTab> {
                         color: Colors.blue.withOpacity(0.7),
                       ),
                     ),
-                    const SizedBox(width: 12),
+                    const SizedBox(width: 20),
                     GestureDetector(
                       onTap: () {
                         final appState =
                             Provider.of<AppState>(context, listen: false);
-                        appState.deleteHabit(habit.id);
+                        _showDeleteConfirmation(
+                          context,
+                          'Delete Habit',
+                          'Are you sure you want to delete "${habit.title}"? This action cannot be undone.',
+                          () => appState.deleteHabit(habit.id),
+                        );
                       },
                       child: Icon(
                         Icons.delete_outline_rounded,
@@ -2287,14 +2328,16 @@ class _HabitsTabState extends State<HabitsTab> {
                       ? Icons.check_rounded
                       : Icons.add_circle_outline_rounded,
                   size: 16,
+                  color: Colors.white,
                 ),
                 label: Text(
                   isCheckedInToday ? 'Checked In Today ✓' : 'Check In',
-                  style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w700),
+                  style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w700, color: Colors.white),
                 ),
                 style: ElevatedButton.styleFrom(
                   backgroundColor:
                       isCheckedInToday ? Colors.green : Colors.orange,
+                  foregroundColor: Colors.white,
                   padding: const EdgeInsets.symmetric(vertical: 8),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(8),
@@ -2304,6 +2347,33 @@ class _HabitsTabState extends State<HabitsTab> {
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  void _showDeleteConfirmation(BuildContext context, String title, String message, VoidCallback onConfirm) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(title),
+        content: Text(message),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Cancel'),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              Navigator.pop(context);
+              onConfirm();
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.red,
+              foregroundColor: Colors.white,
+            ),
+            child: const Text('Delete', style: TextStyle(color: Colors.white)),
+          ),
+        ],
       ),
     );
   }
@@ -2483,8 +2553,9 @@ class _HabitsTabState extends State<HabitsTab> {
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.orange,
+                foregroundColor: Colors.white,
               ),
-              child: const Text('Create Habit'),
+              child: const Text('Create Habit', style: TextStyle(color: Colors.white)),
             ),
           ],
         ),
@@ -2654,8 +2725,9 @@ class _HabitsTabState extends State<HabitsTab> {
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.orange,
+                foregroundColor: Colors.white,
               ),
-              child: const Text('Update Habit'),
+              child: const Text('Update Habit', style: TextStyle(color: Colors.white)),
             ),
           ],
         ),
@@ -2716,9 +2788,9 @@ class _GoalsTabState extends State<GoalsTab> {
                   width: double.infinity,
                   child: ElevatedButton.icon(
                     onPressed: () => _showAddGoalDialog(context),
-                    icon: const Icon(Icons.add_rounded),
-                    label: const Text('Add New Goal'),
-                    style: ElevatedButton.styleFrom(backgroundColor: Colors.pink, padding: const EdgeInsets.symmetric(vertical: 12)),
+                    icon: const Icon(Icons.add_rounded, color: Colors.white),
+                    label: const Text('Add New Goal', style: TextStyle(color: Colors.white)),
+                    style: ElevatedButton.styleFrom(backgroundColor: Colors.pink, foregroundColor: Colors.white, padding: const EdgeInsets.symmetric(vertical: 12)),
                   ),
                 ),
                 const SizedBox(height: 20),
@@ -2885,12 +2957,17 @@ class _GoalsTabState extends State<GoalsTab> {
                         color: Colors.blue.withOpacity(0.7),
                       ),
                     ),
-                    const SizedBox(width: 12),
+                    const SizedBox(width: 20),
                     GestureDetector(
                       onTap: () {
                         final appState =
                             Provider.of<AppState>(context, listen: false);
-                        appState.deleteGoal(goal.id);
+                        _showDeleteConfirmation(
+                          context,
+                          'Delete Goal',
+                          'Are you sure you want to delete "${goal.title}"? This action cannot be undone.',
+                          () => appState.deleteGoal(goal.id),
+                        );
                       },
                       child: Icon(
                         Icons.delete_outline_rounded,
@@ -2968,10 +3045,11 @@ class _GoalsTabState extends State<GoalsTab> {
               width: double.infinity,
               child: ElevatedButton.icon(
                 onPressed: () => _showUpdateGoalProgressDialog(goal),
-                icon: const Icon(Icons.trending_up_rounded, size: 14),
-                label: const Text('Update Progress'),
+                icon: const Icon(Icons.trending_up_rounded, size: 14, color: Colors.white),
+                label: const Text('Update Progress', style: TextStyle(color: Colors.white)),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: color,
+                  foregroundColor: Colors.white,
                   padding: const EdgeInsets.symmetric(vertical: 8),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(6),
@@ -2982,6 +3060,33 @@ class _GoalsTabState extends State<GoalsTab> {
           ],
         ),
       ),
+      ),
+    );
+  }
+
+  void _showDeleteConfirmation(BuildContext context, String title, String message, VoidCallback onConfirm) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(title),
+        content: Text(message),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Cancel'),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              Navigator.pop(context);
+              onConfirm();
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.red,
+              foregroundColor: Colors.white,
+            ),
+            child: const Text('Delete', style: TextStyle(color: Colors.white)),
+          ),
+        ],
       ),
     );
   }
@@ -3119,8 +3224,8 @@ class _GoalsTabState extends State<GoalsTab> {
                   ),
                 );
               },
-              style: ElevatedButton.styleFrom(backgroundColor: Colors.pink),
-              child: const Text('Update Progress'),
+              style: ElevatedButton.styleFrom(backgroundColor: Colors.pink, foregroundColor: Colors.white),
+              child: const Text('Update Progress', style: TextStyle(color: Colors.white)),
             ),
           ],
         ),
@@ -3322,8 +3427,8 @@ class _GoalsTabState extends State<GoalsTab> {
                   Navigator.pop(context);
                 }
               },
-              style: ElevatedButton.styleFrom(backgroundColor: Colors.pink),
-              child: const Text('Create Goal'),
+              style: ElevatedButton.styleFrom(backgroundColor: Colors.pink, foregroundColor: Colors.white),
+              child: const Text('Create Goal', style: TextStyle(color: Colors.white)),
             ),
           ],
         ),
@@ -3522,8 +3627,8 @@ class _GoalsTabState extends State<GoalsTab> {
                   Navigator.pop(context);
                 }
               },
-              style: ElevatedButton.styleFrom(backgroundColor: Colors.pink),
-              child: const Text('Update Goal'),
+              style: ElevatedButton.styleFrom(backgroundColor: Colors.pink, foregroundColor: Colors.white),
+              child: const Text('Update Goal', style: TextStyle(color: Colors.white)),
             ),
           ],
         ),
@@ -3652,8 +3757,8 @@ class _GoalsTabState extends State<GoalsTab> {
                 appState.updateGoal(updated);
                 Navigator.pop(context);
               },
-              style: ElevatedButton.styleFrom(backgroundColor: Colors.pink),
-              child: const Text('Update Progress'),
+              style: ElevatedButton.styleFrom(backgroundColor: Colors.pink, foregroundColor: Colors.white),
+              child: const Text('Update Progress', style: TextStyle(color: Colors.white)),
             ),
           ],
         ),

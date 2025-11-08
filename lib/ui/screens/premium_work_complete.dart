@@ -213,10 +213,11 @@ class _PremiumWorkCompleteState extends State<PremiumWorkComplete>
                   width: double.infinity,
                   child: ElevatedButton.icon(
                     onPressed: () => _showAddTaskDialog(context),
-                    icon: const Icon(Icons.add_rounded),
-                    label: const Text('Add New Task'),
+                    icon: const Icon(Icons.add_rounded, color: Colors.white),
+                    label: const Text('Add New Task', style: TextStyle(color: Colors.white)),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.teal,
+                      foregroundColor: Colors.white,
                       padding: const EdgeInsets.symmetric(vertical: 12),
                     ),
                   ),
@@ -405,18 +406,21 @@ class _PremiumWorkCompleteState extends State<PremiumWorkComplete>
           Row(
             children: [
               GestureDetector(
-                onTap: () {
+                onTap: () async {
                   final updated = Task(
                     id: task.id,
                     title: task.title,
                     description: task.description,
                     priority: task.priority,
                     status: task.status == 0 ? 1 : 0,
+                    estimatedMinutes: task.estimatedMinutes,
+                    actualMinutes: task.actualMinutes,
                     dueDate: task.dueDate,
+                    projectId: task.projectId,
                     createdAt: task.createdAt,
                     updatedAt: DateTime.now(),
                   );
-                  appState.updateTask(updated);
+                  await appState.updateTask(updated);
                 },
                 child: Container(
                   width: 24,
