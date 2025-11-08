@@ -28,10 +28,18 @@ android {
         versionName = flutter.versionName
     }
 
+    signingConfigs {
+        create("release") {
+            storeFile = file(System.getenv("HOME") + "/techieslog.keystore")
+            storePassword = "techieslog123"
+            keyAlias = "techieslog"
+            keyPassword = "techieslog123"
+        }
+    }
+
     buildTypes {
         release {
-            // F-Droid will handle signing
-            signingConfig = null
+            signingConfig = signingConfigs.getByName("release")
             isMinifyEnabled = false
             isShrinkResources = false
         }
