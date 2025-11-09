@@ -3289,7 +3289,11 @@ class _GoalsTabState extends State<GoalsTab> {
   }
 
   void _showUpdateGoalProgressDialog(Goal goal) {
-    double sliderValue = goal.currentValue.toDouble();
+    // If no target value, use progressPercent as slider value (0-100)
+    // Otherwise use currentValue
+    double sliderValue = goal.targetValue == null 
+        ? goal.progressPercent.toDouble() 
+        : goal.currentValue.toDouble();
     final notesController = TextEditingController();
     final maxValue = goal.targetValue ?? 100.0;
 
@@ -3402,10 +3406,10 @@ class _GoalsTabState extends State<GoalsTab> {
                   recordedAt: DateTime.now(),
                 );
                 final updatedHistory = [...?goal.progressHistory, newProgress];
-                final newProgressPercent =
-                    goal.targetValue != null && goal.targetValue! > 0
-                        ? ((sliderValue / goal.targetValue!) * 100).toInt()
-                        : 0;
+                // If no target value, treat slider value as percentage directly
+                final newProgressPercent = goal.targetValue != null && goal.targetValue! > 0
+                    ? ((sliderValue / goal.targetValue!) * 100).toInt()
+                    : sliderValue.toInt(); // Use slider value as percentage if no target
                 final clampedPercent = newProgressPercent.clamp(0, 100);
                 final updated = goal.copyWith(
                   currentValue: sliderValue,
