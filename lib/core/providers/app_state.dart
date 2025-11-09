@@ -529,13 +529,19 @@ class AppState with ChangeNotifier {
   }
 
   Future<void> updateGoal(Goal goal) async {
+    debugPrint('Updating goal: ${goal.title} (ID: ${goal.id})');
+    debugPrint('Goal progress: ${goal.progressPercent}%, status: ${goal.status}');
     final index = _goals.indexWhere((g) => g.id == goal.id);
     if (index != -1) {
       _goals[index] = goal;
       notifyListeners();
+      debugPrint('Goal updated in memory, total goals: ${_goals.length}');
+    } else {
+      debugPrint('Goal not found in list: ${goal.id}');
     }
     try {
       await _db.update('goals', goal.id, goal.toMap());
+      debugPrint('Goal saved to database successfully');
     } catch (e, st) {
       debugPrint('Error updating goal: $e');
       debugPrint('Stack trace: $st');

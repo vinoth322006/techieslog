@@ -3820,7 +3820,7 @@ class _GoalsTabState extends State<GoalsTab> {
                         : strategyController.text,
                     updatedAt: DateTime.now(),
                   );
-                  appState.updateGoal(updatedGoal);
+                  await appState.updateGoal(updatedGoal);
                   Navigator.pop(context);
                 }
               },
@@ -3951,7 +3951,7 @@ class _GoalsTabState extends State<GoalsTab> {
                   progressHistory: updatedHistory,
                   updatedAt: DateTime.now(),
                 );
-                appState.updateGoal(updated);
+                await appState.updateGoal(updated);
                 Navigator.pop(context);
               },
               style: ElevatedButton.styleFrom(backgroundColor: Colors.pink, foregroundColor: Colors.white),
