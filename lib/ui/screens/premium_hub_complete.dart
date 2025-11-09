@@ -816,13 +816,36 @@ class _PremiumHubCompleteState extends State<PremiumHubComplete>
   }
 
   Widget _buildProjectsTab() {
+    return ProjectsTabWithFilter();
+  }
+}
+
+class ProjectsTabWithFilter extends StatefulWidget {
+  const ProjectsTabWithFilter({super.key});
+
+  @override
+  State<ProjectsTabWithFilter> createState() => _ProjectsTabWithFilterState();
+}
+
+class _ProjectsTabWithFilterState extends State<ProjectsTabWithFilter> {
+  String _filter = 'In Progress'; // 'In Progress', 'Completed', 'All'
+
+  @override
+  Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Consumer<AppState>(
       builder: (context, appState, _) {
-        final projects = appState.projects;
-        final activeProjects = projects.where((p) => p.status == 1).length;
-        final completedProjects = projects.where((p) => p.status == 2).length;
+        final allProjects = appState.projects;
+        final inProgressProjects = allProjects.where((p) => p.status == 1).toList();
+        final completedProjects = allProjects.where((p) => p.status == 2).toList();
+        
+        // Filter projects based on selection
+        final displayProjects = _filter == 'In Progress' 
+            ? inProgressProjects 
+            : _filter == 'Completed' 
+                ? completedProjects 
+                : allProjects;
 
         return SingleChildScrollView(
           child: Padding(
@@ -830,7 +853,7 @@ class _PremiumHubCompleteState extends State<PremiumHubComplete>
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Professional Header with Stats (matching Habits/Goals)
+                // Professional Header with Stats
                 Container(
                   padding: const EdgeInsets.all(20),
                   decoration: BoxDecoration(
@@ -849,7 +872,7 @@ class _PremiumHubCompleteState extends State<PremiumHubComplete>
                             children: [
                               Text('Project Manager', style: TextStyle(color: Colors.white.withOpacity(0.9), fontSize: 14, fontWeight: FontWeight.w600)),
                               const SizedBox(height: 8),
-                              Text('${projects.length}', style: const TextStyle(color: Colors.white, fontSize: 32, fontWeight: FontWeight.w900)),
+                              Text('${allProjects.length}', style: const TextStyle(color: Colors.white, fontSize: 32, fontWeight: FontWeight.w900)),
                               Text('Total Projects', style: TextStyle(color: Colors.white.withOpacity(0.8), fontSize: 12)),
                             ],
                           ),
@@ -859,15 +882,31 @@ class _PremiumHubCompleteState extends State<PremiumHubComplete>
                       const SizedBox(height: 16),
                       Row(
                         children: [
-                          Expanded(child: _buildProjectStatBox('Active', '$activeProjects', Colors.white.withOpacity(0.2))),
+                          Expanded(child: _buildProjectStatBox('In Progress', '${inProgressProjects.length}', Colors.white.withOpacity(0.2))),
                           const SizedBox(width: 10),
-                          Expanded(child: _buildProjectStatBox('Completed', '$completedProjects', Colors.white.withOpacity(0.2))),
+                          Expanded(child: _buildProjectStatBox('Completed', '${completedProjects.length}', Colors.white.withOpacity(0.2))),
                         ],
                       ),
                     ],
                   ),
                 ),
                 const SizedBox(height: 20),
+                
+                // Filter Chips
+                SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Row(
+                    children: [
+                      _buildFilterChip('In Progress', inProgressProjects.length, Icons.play_circle_outline_rounded, Colors.orange, isDark),
+                      const SizedBox(width: 8),
+                      _buildFilterChip('Completed', completedProjects.length, Icons.check_circle_outline_rounded, Colors.green, isDark),
+                      const SizedBox(width: 8),
+                      _buildFilterChip('All', allProjects.length, Icons.folder_rounded, Colors.purple, isDark),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 16),
+                
                 SizedBox(
                   width: double.infinity,
                   child: ElevatedButton.icon(
@@ -878,8 +917,9 @@ class _PremiumHubCompleteState extends State<PremiumHubComplete>
                   ),
                 ),
                 const SizedBox(height: 20),
+                
                 // Projects List
-                if (projects.isEmpty)
+                if (displayProjects.isEmpty)
                   Center(
                     child: Padding(
                       padding: const EdgeInsets.symmetric(vertical: 40),
@@ -887,7 +927,7 @@ class _PremiumHubCompleteState extends State<PremiumHubComplete>
                         children: [
                           Icon(Icons.folder_open_rounded, size: 48, color: isDark ? const Color(0xFF475569) : const Color(0xFFCBD5E1)),
                           const SizedBox(height: 12),
-                          Text('No projects yet', style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: isDark ? const Color(0xFF94A3B8) : const Color(0xFF64748B))),
+                          Text('No ${_filter.toLowerCase()} projects', style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: isDark ? const Color(0xFF94A3B8) : const Color(0xFF64748B))),
                         ],
                       ),
                     ),
@@ -896,8 +936,8 @@ class _PremiumHubCompleteState extends State<PremiumHubComplete>
                   ListView.builder(
                     shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),
-                    itemCount: projects.length,
-                    itemBuilder: (context, index) => _buildProjectCard(projects[index], isDark, appState),
+                    itemCount: displayProjects.length,
+                    itemBuilder: (context, index) => _buildProjectCard(displayProjects[index], isDark, appState),
                   ),
               ],
             ),
@@ -906,6 +946,85 @@ class _PremiumHubCompleteState extends State<PremiumHubComplete>
       },
     );
   }
+
+  Widget _buildFilterChip(String label, int count, IconData icon, Color color, bool isDark) {
+    final isSelected = _filter == label;
+    return GestureDetector(
+      onTap: () => setState(() => _filter = label),
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+        decoration: BoxDecoration(
+          color: isSelected ? color : (isDark ? const Color(0xFF1E293B) : Colors.white),
+          borderRadius: BorderRadius.circular(20),
+          border: Border.all(
+            color: isSelected ? color : (isDark ? const Color(0xFF334155) : const Color(0xFFE2E8F0)),
+            width: 2,
+          ),
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(
+              icon,
+              size: 18,
+              color: isSelected ? Colors.white : color,
+            ),
+            const SizedBox(width: 8),
+            Text(
+              label,
+              style: TextStyle(
+                fontSize: 13,
+                fontWeight: FontWeight.w700,
+                color: isSelected ? Colors.white : (isDark ? const Color(0xFFF1F5F9) : const Color(0xFF0F172A)),
+              ),
+            ),
+            const SizedBox(width: 6),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+              decoration: BoxDecoration(
+                color: isSelected ? Colors.white.withOpacity(0.3) : color.withOpacity(0.15),
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: Text(
+                '$count',
+                style: TextStyle(
+                  fontSize: 11,
+                  fontWeight: FontWeight.w800,
+                  color: isSelected ? Colors.white : color,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildProjectStatBox(String label, String value, Color bgColor) {
+    return Container(
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(color: bgColor, borderRadius: BorderRadius.circular(10)),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(label, style: TextStyle(color: Colors.white.withOpacity(0.8), fontSize: 11, fontWeight: FontWeight.w600)),
+          const SizedBox(height: 4),
+          Text(value, style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w800)),
+        ],
+      ),
+    );
+  }
+
+  void _showAddProjectDialog(BuildContext context) {
+    // Call the parent widget's method
+    context.findAncestorStateOfType<_PremiumHubCompleteState>()?._showAddProjectDialog(context);
+  }
+
+  Widget _buildProjectCard(Project project, bool isDark, AppState appState) {
+    // Call the parent widget's method
+    return context.findAncestorStateOfType<_PremiumHubCompleteState>()?._buildProjectCard(project, isDark, appState) ?? const SizedBox();
+  }
+}
 
   Widget _buildProjectStatBox(String label, String value, Color bgColor) {
     return Container(
@@ -2744,15 +2863,24 @@ class GoalsTab extends StatefulWidget {
 }
 
 class _GoalsTabState extends State<GoalsTab> {
+  String _filter = 'In Progress'; // 'In Progress', 'Completed', 'All'
+
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Consumer<AppState>(
       builder: (context, appState, _) {
-        final goals = appState.goals;
-        final activeGoals = goals.where((g) => g.status == 1).length;
-        final completedGoals = goals.where((g) => g.status == 2).length;
+        final allGoals = appState.goals;
+        final inProgressGoals = allGoals.where((g) => g.status == 1).toList();
+        final completedGoals = allGoals.where((g) => g.status == 2).toList();
+        
+        // Filter goals based on selection
+        final displayGoals = _filter == 'In Progress' 
+            ? inProgressGoals 
+            : _filter == 'Completed' 
+                ? completedGoals 
+                : allGoals;
 
         return SingleChildScrollView(
           child: Padding(
@@ -2775,15 +2903,31 @@ class _GoalsTabState extends State<GoalsTab> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          _buildGoalStat('Active', activeGoals.toString(), Colors.white.withOpacity(0.2)),
-                          _buildGoalStat('Completed', completedGoals.toString(), Colors.white.withOpacity(0.2)),
-                          _buildGoalStat('Total', goals.length.toString(), Colors.white.withOpacity(0.2)),
+                          _buildGoalStat('In Progress', inProgressGoals.length.toString(), Colors.white.withOpacity(0.2)),
+                          _buildGoalStat('Completed', completedGoals.length.toString(), Colors.white.withOpacity(0.2)),
+                          _buildGoalStat('Total', allGoals.length.toString(), Colors.white.withOpacity(0.2)),
                         ],
                       ),
                     ],
                   ),
                 ),
                 const SizedBox(height: 20),
+                
+                // Filter Chips
+                SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Row(
+                    children: [
+                      _buildFilterChip('In Progress', inProgressGoals.length, Icons.play_circle_outline_rounded, Colors.orange, isDark),
+                      const SizedBox(width: 8),
+                      _buildFilterChip('Completed', completedGoals.length, Icons.check_circle_outline_rounded, Colors.green, isDark),
+                      const SizedBox(width: 8),
+                      _buildFilterChip('All', allGoals.length, Icons.flag_rounded, Colors.pink, isDark),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 16),
+                
                 SizedBox(
                   width: double.infinity,
                   child: ElevatedButton.icon(
@@ -2794,7 +2938,8 @@ class _GoalsTabState extends State<GoalsTab> {
                   ),
                 ),
                 const SizedBox(height: 20),
-                if (goals.isEmpty)
+                
+                if (displayGoals.isEmpty)
                   Center(
                     child: Padding(
                       padding: const EdgeInsets.symmetric(vertical: 40),
@@ -2802,7 +2947,7 @@ class _GoalsTabState extends State<GoalsTab> {
                         children: [
                           Icon(Icons.flag_rounded, size: 48, color: isDark ? const Color(0xFF475569) : const Color(0xFFCBD5E1)),
                           const SizedBox(height: 12),
-                          Text('No goals yet', style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: isDark ? const Color(0xFF94A3B8) : const Color(0xFF64748B))),
+                          Text('No ${_filter.toLowerCase()} goals', style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: isDark ? const Color(0xFF94A3B8) : const Color(0xFF64748B))),
                         ],
                       ),
                     ),
@@ -2811,14 +2956,67 @@ class _GoalsTabState extends State<GoalsTab> {
                   ListView.builder(
                     shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),
-                    itemCount: goals.length,
-                    itemBuilder: (context, index) => _buildGoalCard(goals[index], isDark, context),
+                    itemCount: displayGoals.length,
+                    itemBuilder: (context, index) => _buildGoalCard(displayGoals[index], isDark, context),
                   ),
               ],
             ),
           ),
         );
       },
+    );
+  }
+
+  Widget _buildFilterChip(String label, int count, IconData icon, Color color, bool isDark) {
+    final isSelected = _filter == label;
+    return GestureDetector(
+      onTap: () => setState(() => _filter = label),
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+        decoration: BoxDecoration(
+          color: isSelected ? color : (isDark ? const Color(0xFF1E293B) : Colors.white),
+          borderRadius: BorderRadius.circular(20),
+          border: Border.all(
+            color: isSelected ? color : (isDark ? const Color(0xFF334155) : const Color(0xFFE2E8F0)),
+            width: 2,
+          ),
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(
+              icon,
+              size: 18,
+              color: isSelected ? Colors.white : color,
+            ),
+            const SizedBox(width: 8),
+            Text(
+              label,
+              style: TextStyle(
+                fontSize: 13,
+                fontWeight: FontWeight.w700,
+                color: isSelected ? Colors.white : (isDark ? const Color(0xFFF1F5F9) : const Color(0xFF0F172A)),
+              ),
+            ),
+            const SizedBox(width: 6),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+              decoration: BoxDecoration(
+                color: isSelected ? Colors.white.withOpacity(0.3) : color.withOpacity(0.15),
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: Text(
+                '$count',
+                style: TextStyle(
+                  fontSize: 11,
+                  fontWeight: FontWeight.w800,
+                  color: isSelected ? Colors.white : color,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 
