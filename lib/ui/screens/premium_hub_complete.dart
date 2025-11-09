@@ -1026,21 +1026,8 @@ class _ProjectsTabWithFilterState extends State<ProjectsTabWithFilter> {
   }
 }
 
-  Widget _buildProjectStatBox(String label, String value, Color bgColor) {
-    return Container(
-      padding: const EdgeInsets.all(12),
-      decoration: BoxDecoration(color: bgColor, borderRadius: BorderRadius.circular(10)),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(label, style: TextStyle(color: Colors.white.withOpacity(0.8), fontSize: 11, fontWeight: FontWeight.w600)),
-          const SizedBox(height: 4),
-          Text(value, style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w800)),
-        ],
-      ),
-    );
-  }
-
+// _PremiumHubCompleteState methods continuation
+extension on _PremiumHubCompleteState {
   void _showAddProjectDialog(BuildContext context) {
     final titleController = TextEditingController();
     final descController = TextEditingController();
