@@ -3796,7 +3796,7 @@ class _GoalsTabState extends State<GoalsTab> {
               child: const Text('Cancel'),
             ),
             ElevatedButton(
-              onPressed: () {
+              onPressed: () async {
                 if (titleController.text.isNotEmpty) {
                   final appState =
                       Provider.of<AppState>(context, listen: false);
@@ -3932,7 +3932,7 @@ class _GoalsTabState extends State<GoalsTab> {
               child: const Text('Cancel'),
             ),
             ElevatedButton(
-              onPressed: () {
+              onPressed: () async {
                 final appState =
                     Provider.of<AppState>(context, listen: false);
                 final newProgress = GoalProgress(
