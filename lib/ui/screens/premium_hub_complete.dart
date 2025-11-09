@@ -1111,7 +1111,7 @@ class _PremiumHubCompleteState extends State<PremiumHubComplete>
                     priority: selectedPriority,
                     targetDate: selectedTargetDate,
                     links: links.isEmpty ? null : links,
-                    status: 0,
+                    status: 1,  // Changed from 0 to 1 - new projects are "In Progress" by default
                     progressPercent: 0,
                     createdAt: DateTime.now(),
                     updatedAt: DateTime.now(),
