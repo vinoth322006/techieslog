@@ -116,9 +116,14 @@ class AppState with ChangeNotifier {
 
       final results = await _db.getAll('projects');
       _projects = results.map((map) => Project.fromMap(map)).toList();
-    } catch (e) {
+      debugPrint('Loaded ${_projects.length} projects from database');
+      for (var project in _projects) {
+        debugPrint('Project: ${project.title} (ID: ${project.id})');
+      }
+    } catch (e, st) {
       _error = 'Failed to load projects: $e';
       debugPrint(_error);
+      debugPrint('Stack trace: $st');
     } finally {
       _isLoading = false;
       notifyListeners();
@@ -206,11 +211,16 @@ class AppState with ChangeNotifier {
   Future<void> addProject(Project project) async {
     _projects.add(project);
     notifyListeners();
+    debugPrint('Adding project: ${project.title} (ID: ${project.id})');
     try {
       await _db.insert('projects', project.toMap());
+      debugPrint('Project saved to database successfully: ${project.title}');
     } catch (e, st) {
       debugPrint('Error saving project: $e');
       debugPrint('Stack trace: $st');
+      // Remove from list if save failed
+      _projects.removeWhere((p) => p.id == project.id);
+      notifyListeners();
     }
   }
 
@@ -219,20 +229,26 @@ class AppState with ChangeNotifier {
     if (index != -1) {
       _projects[index] = project;
       notifyListeners();
-    }
-    try {
-      await _db.update('projects', project.id, project.toMap());
-    } catch (e, st) {
-      debugPrint('Error updating project: $e');
-      debugPrint('Stack trace: $st');
+      debugPrint('Project updated: ${project.title} (ID: ${project.id})');
+      try {
+        await _db.update('projects', project.id, project.toMap());
+        debugPrint('Project saved to database successfully');
+      } catch (e, st) {
+        debugPrint('Error updating project: $e');
+        debugPrint('Stack trace: $st');
+      }
+    } else {
+      debugPrint('Project not found for update: ${project.id}');
     }
   }
 
   Future<void> deleteProject(String projectId) async {
+    debugPrint('Deleting project: $projectId');
     _projects.removeWhere((p) => p.id == projectId);
     notifyListeners();
     try {
       await _db.delete('projects', projectId);
+      debugPrint('Project deleted from database successfully');
     } catch (e, st) {
       debugPrint('Error deleting project: $e');
       debugPrint('Stack trace: $st');
