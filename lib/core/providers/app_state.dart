@@ -508,11 +508,19 @@ class AppState with ChangeNotifier {
   // Goal operations
   Future<void> _loadGoals() async {
     try {
+      debugPrint('Loading goals from database...');
       final data = await _db.getAll('goals');
+      debugPrint('Found ${data.length} goals in database');
       _goals = data.map((map) => Goal.fromMap(map)).toList();
+      debugPrint('Loaded ${_goals.length} goals successfully');
+      for (var goal in _goals) {
+        debugPrint('  - Goal: ${goal.title}, progress: ${goal.progressPercent}%, currentValue: ${goal.currentValue}, targetValue: ${goal.targetValue}');
+      }
       notifyListeners();
-    } catch (e) {
+    } catch (e, st) {
       _error = 'Failed to load goals: $e';
+      debugPrint(_error);
+      debugPrint('Stack trace: $st');
       notifyListeners();
     }
   }
@@ -530,17 +538,20 @@ class AppState with ChangeNotifier {
 
   Future<void> updateGoal(Goal goal) async {
     debugPrint('Updating goal: ${goal.title} (ID: ${goal.id})');
-    debugPrint('Goal progress: ${goal.progressPercent}%, status: ${goal.status}');
+    debugPrint('Goal progress: ${goal.progressPercent}%, status: ${goal.status}, currentValue: ${goal.currentValue}, targetValue: ${goal.targetValue}');
     final index = _goals.indexWhere((g) => g.id == goal.id);
     if (index != -1) {
       _goals[index] = goal;
       notifyListeners();
       debugPrint('Goal updated in memory, total goals: ${_goals.length}');
+      debugPrint('Updated goal in list: progress=${_goals[index].progressPercent}%');
     } else {
       debugPrint('Goal not found in list: ${goal.id}');
     }
     try {
-      await _db.update('goals', goal.id, goal.toMap());
+      final goalMap = goal.toMap();
+      debugPrint('Goal map being saved: $goalMap');
+      await _db.update('goals', goal.id, goalMap);
       debugPrint('Goal saved to database successfully');
     } catch (e, st) {
       debugPrint('Error updating goal: $e');
