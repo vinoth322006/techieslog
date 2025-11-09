@@ -17,7 +17,7 @@ class DatabaseService {
 
     return await openDatabase(
       path,
-      version: 5,
+      version: 6,
       onCreate: _createDB,
       onUpgrade: _upgradeDB,
     );
@@ -356,8 +356,19 @@ class DatabaseService {
       // Add new columns if needed for version 5
       try {
         await db.execute('ALTER TABLE projects ADD COLUMN progress_history TEXT');
+        debugPrint('Migration v5: Added progress_history column');
       } catch (e) {
         debugPrint('Migration v5 error (may be expected): $e');
+      }
+    }
+    
+    if (oldVersion < 6) {
+      // Ensure progress_history column exists for version 6
+      try {
+        await db.execute('ALTER TABLE projects ADD COLUMN progress_history TEXT');
+        debugPrint('Migration v6: Added progress_history column');
+      } catch (e) {
+        debugPrint('Migration v6: progress_history column may already exist: $e');
       }
     }
     
