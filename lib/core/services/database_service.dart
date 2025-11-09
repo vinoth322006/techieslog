@@ -17,7 +17,7 @@ class DatabaseService {
 
     return await openDatabase(
       path,
-      version: 6,
+      version: 7,
       onCreate: _createDB,
       onUpgrade: _upgradeDB,
     );
@@ -71,6 +71,7 @@ class DatabaseService {
         owner TEXT,
         tags TEXT,
         links TEXT,
+        progress_history TEXT,
         created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
         updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
       )
@@ -369,6 +370,18 @@ class DatabaseService {
         debugPrint('Migration v6: Added progress_history column');
       } catch (e) {
         debugPrint('Migration v6: progress_history column may already exist: $e');
+      }
+    }
+    
+    if (oldVersion < 7) {
+      // Version 7: Ensure all project columns exist
+      debugPrint('Migration v7: Verifying projects table schema...');
+      try {
+        // Check if progress_history exists, if not add it
+        await db.execute('ALTER TABLE projects ADD COLUMN progress_history TEXT');
+        debugPrint('Migration v7: Added progress_history column');
+      } catch (e) {
+        debugPrint('Migration v7: progress_history column already exists');
       }
     }
     
