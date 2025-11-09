@@ -828,7 +828,7 @@ class ProjectsTabWithFilter extends StatefulWidget {
 }
 
 class _ProjectsTabWithFilterState extends State<ProjectsTabWithFilter> {
-  String _filter = 'In Progress'; // 'In Progress', 'Completed', 'All'
+  String _filter = 'In Progress'; // 'In Progress', 'Overdue', 'Completed', 'All'
 
   @override
   Widget build(BuildContext context) {
@@ -839,13 +839,21 @@ class _ProjectsTabWithFilterState extends State<ProjectsTabWithFilter> {
         final allProjects = appState.projects;
         final inProgressProjects = allProjects.where((p) => p.status == 1).toList();
         final completedProjects = allProjects.where((p) => p.status == 2).toList();
+        final now = DateTime.now();
+        final overdueProjects = allProjects.where((p) => 
+          p.status == 1 && 
+          p.targetDate != null && 
+          p.targetDate!.isBefore(now)
+        ).toList();
         
         // Filter projects based on selection
         final displayProjects = _filter == 'In Progress' 
             ? inProgressProjects 
-            : _filter == 'Completed' 
-                ? completedProjects 
-                : allProjects;
+            : _filter == 'Overdue'
+                ? overdueProjects
+                : _filter == 'Completed' 
+                    ? completedProjects 
+                    : allProjects;
 
         return SingleChildScrollView(
           child: Padding(
@@ -882,9 +890,11 @@ class _ProjectsTabWithFilterState extends State<ProjectsTabWithFilter> {
                       const SizedBox(height: 16),
                       Row(
                         children: [
-                          Expanded(child: _buildProjectStatBox('In Progress', '${inProgressProjects.length}', Colors.white.withOpacity(0.2))),
-                          const SizedBox(width: 10),
-                          Expanded(child: _buildProjectStatBox('Completed', '${completedProjects.length}', Colors.white.withOpacity(0.2))),
+                          Expanded(child: _buildProjectStatBox('Active', '${inProgressProjects.length}', Colors.white.withOpacity(0.2))),
+                          const SizedBox(width: 8),
+                          Expanded(child: _buildProjectStatBox('Overdue', '${overdueProjects.length}', Colors.white.withOpacity(0.2))),
+                          const SizedBox(width: 8),
+                          Expanded(child: _buildProjectStatBox('Done', '${completedProjects.length}', Colors.white.withOpacity(0.2))),
                         ],
                       ),
                     ],
@@ -898,6 +908,8 @@ class _ProjectsTabWithFilterState extends State<ProjectsTabWithFilter> {
                   child: Row(
                     children: [
                       _buildFilterChip('In Progress', inProgressProjects.length, Icons.play_circle_outline_rounded, Colors.orange, isDark),
+                      const SizedBox(width: 8),
+                      _buildFilterChip('Overdue', overdueProjects.length, Icons.warning_amber_rounded, Colors.red, isDark),
                       const SizedBox(width: 8),
                       _buildFilterChip('Completed', completedProjects.length, Icons.check_circle_outline_rounded, Colors.green, isDark),
                       const SizedBox(width: 8),
