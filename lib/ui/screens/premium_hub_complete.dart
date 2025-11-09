@@ -3406,9 +3406,11 @@ class _GoalsTabState extends State<GoalsTab> {
                     goal.targetValue != null && goal.targetValue! > 0
                         ? ((sliderValue / goal.targetValue!) * 100).toInt()
                         : 0;
+                final clampedPercent = newProgressPercent.clamp(0, 100);
                 final updated = goal.copyWith(
                   currentValue: sliderValue,
-                  progressPercent: newProgressPercent.clamp(0, 100),
+                  progressPercent: clampedPercent,
+                  status: clampedPercent >= 100 ? 2 : 1,
                   progressHistory: updatedHistory,
                   updatedAt: DateTime.now(),
                 );
