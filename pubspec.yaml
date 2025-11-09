@@ -25,6 +25,7 @@ dependencies:
   percent_indicator: ^4.2.3
   fl_chart: ^0.63.0
   table_calendar: ^3.0.9
+  confetti: ^0.7.0
   
   # Date and Time
   intl: ^0.18.1
